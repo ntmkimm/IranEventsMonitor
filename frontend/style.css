@@ -1,0 +1,94 @@
+/* 1. RESET CƠ BẢN VÀ BỐ CỤC CHÍNH */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100vh; /* Bằng đúng 100% chiều cao màn hình */
+    display: flex; 
+    flex-direction: column; /* Xếp Header ở trên, Bản đồ ở dưới */
+    overflow: hidden;
+    background-color: #050505;
+    color: #e0e0e0;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* 2. THANH HEADER */
+.top-bar {
+    background-color: #111;
+    border-bottom: 1px solid #333;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0; /* QUAN TRỌNG: Ngăn không cho Header bị ép xẹp lại */
+    z-index: 1000; /* Luôn nổi lên trên cùng */
+}
+
+.top-bar h1 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #ff4444;
+    letter-spacing: 2px;
+}
+
+/* 3. NÚT BẤM ĐIỀU KHIỂN */
+.map-controls {
+    display: flex;
+    gap: 10px;
+}
+.map-controls button {
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid #333;
+    color: #888;
+    padding: 5px 15px;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.map-controls button:hover { border-color: #58a6ff; color: #58a6ff; }
+.map-controls button.active { background-color: #58a6ff; color: #000; border-color: #58a6ff; }
+
+/* 4. KHUNG BẢN ĐỒ (BUNG FULL MÀN HÌNH) */
+.main-content {
+    flex: 1; /* Tự động kéo giãn để lấp đầy khoảng trống bên dưới Header */
+    position: relative; /* Làm điểm neo cho bản đồ */
+    width: 100%;
+}
+
+#map-container {
+    position: absolute; /* Khóa chặt 4 góc vào khung .main-content */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #050505;
+}
+
+#map-2d, #globe-viz {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* 5. GIAO DIỆN BONG BÓNG POPUP (LEAFLET 2D) */
+.leaflet-popup-content-wrapper {
+    background: rgba(15, 15, 15, 0.95);
+    border: 1px solid #ff4444;
+    color: #e0e0e0;
+    border-radius: 6px;
+    box-shadow: 0 0 15px rgba(255, 68, 68, 0.2);
+}
+.leaflet-popup-tip {
+    background: rgba(15, 15, 15, 0.95);
+    border: 1px solid #ff4444;
+}
+.leaflet-popup-close-button {
+    color: #fff !important;
+    font-size: 16px !important;
+}
+
+/* Thanh cuộn cho danh sách sự kiện bên trong Popup */
+.event-scroll-list::-webkit-scrollbar { width: 5px; }
+.event-scroll-list::-webkit-scrollbar-thumb { background: #ff4444; border-radius: 5px; }

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>US-Iran Crisis Monitor</title>
+    <link rel="stylesheet" href="./style.css">
+    
+    <script src="//unpkg.com/globe.gl"></script>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+<body>
+    <header class="top-bar">
+        <h1>🚨 GLOBAL INTEL</h1>
+        
+        <div id="oil-ticker" style="font-size: 0.9rem; letter-spacing: 1px; display: flex; gap: 15px;">
+            <span>Đang tải dữ liệu năng lượng...</span>
+        </div>
+        
+        <div class="map-controls">
+            <button id="btn-2d" class="active">2D TACTICAL</button>
+            <button id="btn-3d">3D GLOBE</button>
+            
+            <button id="btn-refresh-acled" style="color: #ffaa00; border-color: #ffaa00;">⚠️ SYNC EVENTS</button>
+            <button id="btn-refresh-oil" style="color: #00ffff; border-color: #00ffff;">🛢️ SYNC OIL</button>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section id="map-container">
+            <div id="globe-viz" style="display: none;"></div>
+            <div id="map-2d" style="display: block; width: 100%; height: 100%;"></div>
+        </section>
+    </main>
+
+    <script type="module" src="./main.js"></script>
+</body>
+</html>
