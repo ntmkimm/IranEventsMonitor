@@ -51,11 +51,13 @@ def crawl_acled_iran():
                     })
 
                 # --- ĐƯỜNG DẪN TƯƠNG ĐỐI THÔNG MINH (BẢN CHUẨN) ---
-                # 1. Lấy thư mục chứa file Python này đang đứng (tức là thư mục backend)
+                # 1. Lấy thư mục chứa file Python này đang đứng (tức là thư mục backend/crawlers)
                 current_dir = os.path.dirname(os.path.abspath(__file__))
+                # Đi lên 1 cấp để vào thư mục backend, rồi vào data
+                backend_dir = os.path.dirname(current_dir)
                 
                 # 2. Đi thẳng vào thư mục data nằm ngay cạnh nó
-                save_path = os.path.join(current_dir, 'data', 'iran_protests_clean.json')
+                save_path = os.path.join(backend_dir, 'data', 'iran_protests_clean.json')
                 
                 # Đảm bảo thư mục tồn tại trước khi lưu
                 os.makedirs(os.path.dirname(save_path), exist_ok=True)

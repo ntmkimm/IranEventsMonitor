@@ -21,7 +21,7 @@ CORS(app)
 def run_acled_crawl():
     """Chạy crawl ACLED events"""
     print("⚡ Running ACLED crawl...")
-    script_path = os.path.join(os.path.dirname(__file__), 'iran_crawl_acled.py')
+    script_path = os.path.join(os.path.dirname(__file__), 'crawlers', 'iran_crawl_acled.py')
     result = subprocess.run(['python', script_path], capture_output=True, text=True)
     if result.returncode == 0:
         print("✅ ACLED crawl completed")
@@ -31,7 +31,7 @@ def run_acled_crawl():
 def run_oil_crawl():
     """Chạy crawl oil prices"""
     print("🛢️ Running oil prices crawl...")
-    script_path = os.path.join(os.path.dirname(__file__), 'crawl_oil_prices.py')
+    script_path = os.path.join(os.path.dirname(__file__), 'crawlers', 'crawl_oil_prices.py')
     result = subprocess.run(['python', script_path], capture_output=True, text=True)
     if result.returncode == 0:
         print("✅ Oil prices crawl completed")
@@ -41,7 +41,7 @@ def run_oil_crawl():
 def run_security_crawl():
     """Chạy crawl security advisories"""
     print("🛡️ Running security crawl...")
-    script_path = os.path.join(os.path.dirname(__file__), 'crawl_security.py')
+    script_path = os.path.join(os.path.dirname(__file__), 'crawlers', 'crawl_security.py')
     if os.path.exists(script_path):
         result = subprocess.run(['python', script_path], capture_output=True, text=True)
         if result.returncode == 0:

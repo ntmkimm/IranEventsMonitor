@@ -54,7 +54,9 @@ def crawl_oil_prices():
 
     # Đường dẫn lưu file thông minh (chung thư mục data với ACLED)
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    save_path = os.path.join(current_dir, 'data', 'oil_prices.json')
+    # Đi lên 1 cấp để vào thư mục backend, rồi vào data
+    backend_dir = os.path.dirname(current_dir)
+    save_path = os.path.join(backend_dir, 'data', 'oil_prices.json')
     
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
 

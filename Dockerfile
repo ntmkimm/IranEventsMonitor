@@ -23,8 +23,3 @@ EXPOSE 5173 3000
 
 # Cài đặt concurrently để chạy nhiều lệnh cùng lúc
 RUN npm install -g concurrently
-
-# Lệnh khởi chạy đồng thời cả backend và frontend
-CMD ["concurrently", \
-     "npm run dev", \
-     "python backend/app.py"]
