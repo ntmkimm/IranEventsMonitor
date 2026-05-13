@@ -249,8 +249,265 @@ function setupRefreshButtons() {
     btnOil.addEventListener('click', () => handleSync(btnOil, 'http://localhost:3000/api/refresh/oil', 'oil'));
 }
 
-// KÍCH HOẠT CHẠY 
-setupToggleButtons();
-setupRefreshButtons();
-fetchOilData(); 
-initDashboard();
+// Webcam data
+const WEBCAM_FEEDS = [
+    { id: 'tehran', city: 'Tehran', country: 'Iran', region: 'iran', videoId: 'gmtlJ_m2r5A' },
+    { id: 'israel-cam', city: 'Tel Aviv', country: 'Israel', region: 'iran', videoId: 'fIurYTprwzg' },
+    { id: 'jerusalem', city: 'Jerusalem', country: 'Israel', region: 'middle-east', videoId: 'e34xb-Fbl0U' },
+    { id: 'beirut', city: 'Beirut', country: 'Lebanon', region: 'middle-east', videoId: 'djF-Lkgfp6k' },
+    { id: 'washington', city: 'Washington DC', country: 'USA', region: 'americas', videoId: '1wV9lLe14aU' },
+    { id: 'new-york', city: 'New York', country: 'USA', region: 'americas', videoId: '4qyZLflp-sI' }
+];
+
+let webcamViewMode = 'grid';
+let activeWebcamFeed = WEBCAM_FEEDS[0];
+let securityAdvisories = [];
+let securityFilter = 'all';
+
+// Render Webcams
+function renderWebcams() {
+    const container = document.getElementById('webcam-content');
+    if (!container) return;
+    
+    if (webcamViewMode === 'grid') {
+        const grid = document.createElement('div');
+        grid.className = 'webcam-grid';
+        
+        WEBCAM_FEEDS.slice(0, 4).forEach(feed => {
+            const cell = document.createElement('div');
+            cell.className = 'webcam-cell';
+            cell.innerHTML = `
+                <div class="webcam-cell-label">🔴 LIVE ${feed.city}</div>
+                <iframe class="webcam-iframe" 
+                    src="https://www.youtube.com/embed/${feed.videoId}?autoplay=1&mute=1&controls=0&modestbranding=1&playsinline=1"
+                    allow="autoplay; encrypted-media"
+                    frameborder="0"></iframe>
+            `;
+            grid.appendChild(cell);
+        });
+        container.innerHTML = '';
+        container.appendChild(grid);
+    } else {
+        container.innerHTML = `
+            <div class="webcam-single">
+                <iframe class="webcam-iframe" 
+                    src="https://www.youtube.com/embed/${activeWebcamFeed.videoId}?autoplay=1&mute=1&controls=0&modestbranding=1&playsinline=1"
+                    allow="autoplay; encrypted-media"
+                    frameborder="0"></iframe>
+            </div>
+            <div class="webcam-switcher" id="webcam-switcher"></div>
+        `;
+        
+        const switcher = document.getElementById('webcam-switcher');
+        if (switcher) {
+            WEBCAM_FEEDS.forEach(feed => {
+                const btn = document.createElement('button');
+                btn.className = `webcam-feed-btn${feed.id === activeWebcamFeed.id ? ' active' : ''}`;
+                btn.textContent = feed.city;
+                btn.onclick = () => {
+                    activeWebcamFeed = feed;
+                    renderWebcams();
+                };
+                switcher.appendChild(btn);
+            });
+        }
+    }
+}
+
+// Load Security Advisories từ API
+async function loadSecurityAdvisories() {
+    try {
+        const response = await fetch('http://localhost:3000/api/security');
+        const data = await response.json();
+        securityAdvisories = data.advisories || [];
+        renderSecurityAdvisories();
+    } catch (error) {
+        console.error('Error loading security advisories:', error);
+        document.getElementById('security-content').innerHTML = '<div class="sec-empty">⚠️ Failed to load security data</div>';
+    }
+}
+
+// Render Security Advisories
+function renderSecurityAdvisories() {
+    const container = document.getElementById('security-content');
+    if (!container) return;
+    
+    let filtered = securityAdvisories;
+    
+    if (securityFilter === 'critical') {
+        filtered = securityAdvisories.filter(a => a.level === 'do-not-travel' || a.level === 'reconsider');
+    } else if (securityFilter === 'US') {
+        filtered = securityAdvisories.filter(a => a.sourceCountry === 'US');
+    }
+    
+    if (filtered.length === 0) {
+        container.innerHTML = '<div class="sec-empty">No security advisories for selected filter</div>';
+        return;
+    }
+    
+    const itemsHtml = filtered.slice(0, 15).map(adv => {
+        const levelClass = adv.level === 'do-not-travel' ? 'do-not-travel' : 
+                          (adv.level === 'reconsider' ? 'reconsider' : 'caution');
+        const levelLabel = adv.level === 'do-not-travel' ? 'DO NOT TRAVEL' :
+                          (adv.level === 'reconsider' ? 'RECONSIDER' : 'CAUTION');
+        
+        const date = new Date(adv.pubDate);
+        const timeAgo = `${Math.floor((Date.now() - date.getTime()) / 3600000)}h ago`;
+        
+        return `
+            <div class="sec-item">
+                <div class="sec-item-header">
+                    <span class="sec-badge ${levelClass}">${levelLabel}</span>
+                    <span class="sec-source">🇺🇸 ${adv.source}</span>
+                </div>
+                <a href="${adv.link}" target="_blank" class="sec-title">${adv.title}</a>
+                <div class="sec-description">${(adv.description || 'No details').substring(0, 150)}...</div>
+                <div class="sec-time">📅 ${timeAgo}</div>
+            </div>
+        `;
+    }).join('');
+    
+    container.innerHTML = itemsHtml;
+}
+
+// Setup Webcam controls
+function setupWebcamControls() {
+    const gridBtn = document.getElementById('webcam-grid-view');
+    const singleBtn = document.getElementById('webcam-single-view');
+    const fullscreenBtn = document.getElementById('webcam-fullscreen');
+    const panel = document.getElementById('webcam-panel');
+    
+    if (gridBtn) {
+        gridBtn.onclick = () => {
+            webcamViewMode = 'grid';
+            gridBtn.classList.add('active');
+            singleBtn.classList.remove('active');
+            renderWebcams();
+        };
+    }
+    
+    if (singleBtn) {
+        singleBtn.onclick = () => {
+            webcamViewMode = 'single';
+            singleBtn.classList.add('active');
+            gridBtn.classList.remove('active');
+            renderWebcams();
+        };
+    }
+    
+    if (fullscreenBtn && panel) {
+        fullscreenBtn.onclick = () => {
+            if (panel.requestFullscreen) panel.requestFullscreen();
+            else if (panel.webkitRequestFullscreen) panel.webkitRequestFullscreen();
+        };
+    }
+}
+
+// Setup Security filters
+function setupSecurityFilters() {
+    const filters = document.querySelectorAll('.sec-filter');
+    filters.forEach(btn => {
+        btn.onclick = () => {
+            filters.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            securityFilter = btn.dataset.filter;
+            renderSecurityAdvisories();
+        };
+    });
+}
+
+// Refresh security data
+async function refreshSecurityData() {
+    const btn = document.getElementById('btn-refresh-security');
+    const originalText = btn.innerText;
+    btn.innerText = '⏳ SYNCING...';
+    btn.disabled = true;
+    
+    try {
+        await fetch('http://localhost:3000/api/refresh/security', { method: 'POST' });
+        setTimeout(async () => {
+            await loadSecurityAdvisories();
+            btn.innerText = '✅ SUCCESS';
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }, 2000);
+        }, 3000);
+    } catch (error) {
+        btn.innerText = '❌ FAIL';
+        setTimeout(() => {
+            btn.innerText = originalText;
+            btn.disabled = false;
+        }, 2000);
+    }
+}
+
+// Cập nhật setupRefreshButtons để thêm security
+function setupAllRefreshButtons() {
+    // Existing buttons
+    const btnAcled = document.getElementById('btn-refresh-acled');
+    const btnOil = document.getElementById('btn-refresh-oil');
+    const btnSecurity = document.getElementById('btn-refresh-security');
+    
+    async function handleSync(btnElement, url, type) {
+        const originalText = btnElement.innerText;
+        btnElement.innerText = '⏳ SYNCING...';
+        btnElement.disabled = true;
+        
+        try {
+            const response = await fetch(url, { method: 'POST' });
+            if (!response.ok) throw new Error("API lỗi");
+            
+            if (type === 'acled') await initDashboard();
+            if (type === 'oil') await fetchOilData();
+            if (type === 'security') {
+                setTimeout(async () => {
+                    await loadSecurityAdvisories();
+                    btnElement.innerText = '✅ SUCCESS';
+                    setTimeout(() => {
+                        btnElement.innerText = originalText;
+                        btnElement.disabled = false;
+                    }, 2000);
+                }, 3000);
+                return;
+            }
+            
+            btnElement.innerText = '✅ SUCCESS';
+            setTimeout(() => {
+                btnElement.innerText = originalText;
+                btnElement.disabled = false;
+            }, 2000);
+        } catch (error) {
+            btnElement.innerText = '❌ FAIL';
+            setTimeout(() => {
+                btnElement.innerText = originalText;
+                btnElement.disabled = false;
+            }, 2000);
+        }
+    }
+    
+    if (btnAcled) btnAcled.onclick = () => handleSync(btnAcled, 'http://localhost:3000/api/refresh/acled', 'acled');
+    if (btnOil) btnOil.onclick = () => handleSync(btnOil, 'http://localhost:3000/api/refresh/oil', 'oil');
+    if (btnSecurity) btnSecurity.onclick = () => handleSync(btnSecurity, 'http://localhost:3000/api/refresh/security', 'security');
+}
+
+// Khởi tạo tất cả
+async function init() {
+    // Init existing dashboard
+    await initDashboard();
+    fetchOilData();
+    setupToggleButtons();
+    setupAllRefreshButtons(); // Thay thế setupRefreshButtons cũ
+    
+    // Init new features
+    renderWebcams();
+    setupWebcamControls();
+    setupSecurityFilters();
+    await loadSecurityAdvisories();
+    
+    // Auto refresh security every 5 minutes
+    setInterval(loadSecurityAdvisories, 300000);
+}
+
+// Run initialization
+init();

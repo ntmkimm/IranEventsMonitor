@@ -2637,6 +2637,15 @@
         "notes": "On 12 May 2025, clashes erupted between local residents, including members of the Baloch community, and police forces for the second day in a row in Kolahi port (Minab, Hormozgan) during an anti-fuel smuggling operation. The police destroyed fuel tankers and vehicles, while used tear gas and arrested several Sukhtbars or Baloch fuel smugglers. Some rioters sustained injuries with shotgun."
     },
     {
+        "id": "IRN31205",
+        "date": "2025-05-13",
+        "type": "Riots",
+        "location": "Kolahi",
+        "lat": 27.0581,
+        "lng": 56.8719,
+        "notes": "On 13 May 2025, clashes erupted between local residents, including members of the Baloch community, and police forces for the third day in a row in Kolahi port (Minab, Hormozgan) during an anti-fuel smuggling operation. The police destroyed fuel tankers and vehicles, while used tear gas and arrested several Sukhtbars or Baloch fuel smugglers. Some local residents sustained injuries with shotgun."
+    },
+    {
         "id": "IRN31209",
         "date": "2025-05-12",
         "type": "Protests",
@@ -2653,6 +2662,15 @@
         "lat": 28.7519,
         "lng": 54.5444,
         "notes": "On 11 May 2025, local residents rallied outside the Electricity Department in Darab city (Darab, Fars) over power outages."
+    },
+    {
+        "id": "IRN31215",
+        "date": "2025-05-13",
+        "type": "Protests",
+        "location": "Shiraz",
+        "lat": 29.6103,
+        "lng": 52.5311,
+        "notes": "On 13 May 2025, local farmers rallied outside the provincial governor's office in Shiraz city (Shiraz, Fars) over power outages and the resulting damages."
     },
     {
         "id": "IRN31216",
@@ -2689,6 +2707,15 @@
         "lat": 37.2761,
         "lng": 49.5886,
         "notes": "On 12 May 2025, retirees of the telecommunication company staged a protest in front of the provincial telecommunication company's central office in Rasht city (Rasht, Gilan) over their ongoing dispute with the company regarding insurance premium rates and to demand payment of pension arrears."
+    },
+    {
+        "id": "IRN31220",
+        "date": "2025-05-13",
+        "type": "Protests",
+        "location": "Rasht",
+        "lat": 37.2761,
+        "lng": 49.5886,
+        "notes": "On 13 May 2025, local bakers staged a rally outside the provincial governor's office in Rasht city (Rasht, Gilan) over the poor living conditions, rising production costs, and frequent power outages."
     },
     {
         "id": "IRN31221",
@@ -2772,6 +2799,15 @@
         "notes": "On 12 May 2025, retirees of the telecommunication company staged a protest in front of the provincial telecommunication company's central office in Kermanshah city (Kermanshah, Kermanshah) over their ongoing dispute with the company regarding insurance premium rates and to demand payment of pension arrears."
     },
     {
+        "id": "IRN31236",
+        "date": "2025-05-13",
+        "type": "Protests",
+        "location": "Abadan",
+        "lat": 30.3392,
+        "lng": 48.3043,
+        "notes": "On 13 May 2025, retirees of the petrochemical company protested and picketed outside the county governor's office in Abadan city (Abadan, Khuzestan) over their unmet demands."
+    },
+    {
         "id": "IRN31237",
         "date": "2025-05-10",
         "type": "Protests",
@@ -2799,6 +2835,15 @@
         "notes": "On 12 May 2025, retirees of the telecommunication company of Iran staged a protest in front of the provincial telecommunication company's central office in Ahvaz city (Ahvaz, Khuzestan) over their ongoing dispute with the company regarding insurance premium rates and to demand payment of pension arrears."
     },
     {
+        "id": "IRN31240",
+        "date": "2025-05-13",
+        "type": "Protests",
+        "location": "Ahvaz",
+        "lat": 31.319,
+        "lng": 48.6842,
+        "notes": "On 13 May 2025, retirees of the oil industry staged a protest outside the Petroleum Industry Pension Fund in Ahvaz city (Ahvaz, Khuzestan) to call for implementing the 102nd edition of the statute in accordance with the pension fund regulations."
+    },
+    {
         "id": "IRN31242",
         "date": "2025-05-11",
         "type": "Protests",
@@ -2815,6 +2860,15 @@
         "lat": 32.1942,
         "lng": 48.2436,
         "notes": "On 11 May 2025, retirees of the Social Security Organization protested in front of the county governor's office in Shush city (Shush, Khuzestan) over the lack of salary equalization and poor living conditions."
+    },
+    {
+        "id": "IRN31244",
+        "date": "2025-05-13",
+        "type": "Protests",
+        "location": "Dogonbadan",
+        "lat": 30.3586,
+        "lng": 50.7981,
+        "notes": "On 13 May 2025, young job seekers staged a rally outside the Gachsaran Petrochemical Company in Dogonbadan city (Gachsaran, Kohgiluyeh and Boyer-Ahmad) to demand the hiring of local job seekers."
     },
     {
         "id": "IRN31246",
@@ -2880,6 +2934,15 @@
         "notes": "On 12 May 2025, retirees of the telecommunication company of Iran staged a protest in front of the provincial telecommunication company's central office in Arak city (Arak, Markazi) over their ongoing dispute with the company regarding insurance premium rates and to demand payment of pension arrears."
     },
     {
+        "id": "IRN31253",
+        "date": "2025-05-13",
+        "type": "Protests",
+        "location": "Arak",
+        "lat": 34.0917,
+        "lng": 49.6892,
+        "notes": "On 13 May 2025, workers at the Iralco company rallied in Arak city (Arak, Markazi) over power outages and the resulting damages."
+    },
+    {
         "id": "IRN31254",
         "date": "2025-05-12",
         "type": "Protests",
@@ -2889,6 +2952,24 @@
         "notes": "On 12 May 2025, retirees of the telecommunication company staged a protest in front of the county telecommunication company's central office in Babol city (Babol, Mazandaran) over their ongoing dispute with the company regarding insurance premium rates and to demand payment of pension arrears."
     },
     {
+        "id": "IRN31255",
+        "date": "2025-05-13",
+        "type": "Protests",
+        "location": "Babolsar",
+        "lat": 36.7025,
+        "lng": 52.6576,
+        "notes": "On 13 May 2025, local bakers staged a rally outside the county governor's office in Babolsar city (Babolsar, Mazandaran) over the poor living conditions, rising production costs, and frequent power outages."
+    },
+    {
+        "id": "IRN31259",
+        "date": "2025-05-13",
+        "type": "Protests",
+        "location": "Sarakhs",
+        "lat": 36.5449,
+        "lng": 61.1577,
+        "notes": "On 13 May 2025, local villagers rallied and blocked the road near Sarakhs city (Sarakhs, Razavi Khorasan) to protest against increased road accidents."
+    },
+    {
         "id": "IRN31260",
         "date": "2025-05-10",
         "type": "Protests",
@@ -2896,6 +2977,15 @@
         "lat": 25.2919,
         "lng": 60.643,
         "notes": "On 10 May 2025, workers of Arshin Khuh Company held a rally outside their workplace in Chabahar city (Chabahar, Sistan and Baluchestan) to demand payment of their salary arrears."
+    },
+    {
+        "id": "IRN31263",
+        "date": "2025-05-13",
+        "type": "Protests",
+        "location": "Tehran - District 1",
+        "lat": 35.807,
+        "lng": 51.4607,
+        "notes": "On 13 May 2025, families of prisoners sentenced to death and local residents staged a rally outside the Evin Prison in Tehran - District 1 (Tehran, Tehran) to demand execution sentences be revoked."
     },
     {
         "id": "IRN31265",
@@ -3103,6 +3193,15 @@
         "lat": 38.08,
         "lng": 46.2919,
         "notes": "On 12 May 2025, health workers staged a rally at the Tabriz University of Medical Sciences in Tabriz city (Tabriz, East Azerbaijan) to protest against discrimination in reducing working hours."
+    },
+    {
+        "id": "IRN31213",
+        "date": "2025-05-13",
+        "type": "Protests",
+        "location": "Tabriz",
+        "lat": 38.08,
+        "lng": 46.2919,
+        "notes": "On 13 May 2025, contracted workers of the telecommunication company of Iran staged a protest in front of the provincial telecommunication company's central office in Tabriz city (Tabriz, East Azerbaijan) over the failure to receive annuity benefits, unfair payments, and problems related to medical expenses."
     },
     {
         "id": "IRN30892",

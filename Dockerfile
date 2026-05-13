@@ -15,8 +15,16 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy toàn bộ code vào Container
 COPY . .
 
+# Tạo thư mục data nếu chưa có
+RUN mkdir -p /app/backend/data
+
 # Mở cửa cho cổng Frontend (5173) và Backend (3000)
 EXPOSE 5173 3000
 
-# Lệnh khởi chạy
-CMD ["npm", "run", "dev"]
+# Cài đặt concurrently để chạy nhiều lệnh cùng lúc
+RUN npm install -g concurrently
+
+# Lệnh khởi chạy đồng thời cả backend và frontend
+CMD ["concurrently", \
+     "npm run dev", \
+     "python backend/app.py"]

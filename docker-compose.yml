@@ -1,12 +1,15 @@
+version: '3.8'
+
 services:
-  tactical-dashboard:
+  app:
     build: .
-    container_name: mini-world-monitor
     ports:
-      - "3000:3000"
-      - "5173:5173"
+      - "3000:3000"   # Backend Flask
+      - "5173:5173"   # Frontend Vite
     volumes:
-      - .:/app         
-      - /app/node_modules 
+      - ./backend/data:/app/backend/data
+      - ./frontend:/app/frontend
     environment:
-      - NODE_ENV=development
+      - FLASK_ENV=development
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped

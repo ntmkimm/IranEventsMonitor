@@ -89,6 +89,235 @@ body, html {
     font-size: 16px !important;
 }
 
+/* Dashboard Panels */
+#dashboard-panels {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(10, 10, 20, 0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid #333;
+    display: flex;
+    gap: 20px;
+    padding: 15px 20px;
+    z-index: 1000;
+    height: auto;
+    max-height: 40vh;
+    overflow-y: auto;
+}
+
+.info-panel {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 8px;
+    border: 1px solid #333;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.panel-header {
+    padding: 10px 15px;
+    background: rgba(0, 0, 0, 0.8);
+    border-bottom: 1px solid #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.panel-title {
+    font-weight: bold;
+    color: #ffaa00;
+    font-size: 14px;
+}
+
+.panel-content {
+    padding: 10px;
+    max-height: 250px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* Webcam Styles */
+.webcam-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.webcam-view-btn, .webcam-fullscreen-btn {
+    background: #1a1a2e;
+    border: 1px solid #333;
+    color: #aaa;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.webcam-view-btn.active {
+    background: #ffaa00;
+    color: #000;
+    border-color: #ffaa00;
+}
+
+.webcam-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 10px;
+}
+
+.webcam-cell {
+    position: relative;
+    aspect-ratio: 16/9;
+    background: #000;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.webcam-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.webcam-cell-label {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: bold;
+    color: #ff4444;
+    z-index: 10;
+}
+
+.webcam-single {
+    aspect-ratio: 16/9;
+    background: #000;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.webcam-switcher {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.webcam-feed-btn {
+    background: #1a1a2e;
+    border: 1px solid #333;
+    color: #aaa;
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+}
+
+.webcam-feed-btn.active {
+    background: #ffaa00;
+    color: #000;
+}
+
+.webcam-placeholder {
+    text-align: center;
+    padding: 30px;
+    color: #666;
+    font-size: 12px;
+}
+
+/* Security Advisories Styles */
+.security-filters {
+    display: flex;
+    gap: 6px;
+}
+
+.sec-filter {
+    background: #1a1a2e;
+    border: 1px solid #333;
+    color: #aaa;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+}
+
+.sec-filter.active {
+    background: #ffaa00;
+    color: #000;
+}
+
+.sec-item {
+    padding: 10px;
+    border-bottom: 1px solid #222;
+    margin-bottom: 8px;
+    border-radius: 6px;
+}
+
+.sec-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.sec-badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.sec-badge.do-not-travel { background: #dc2626; color: white; }
+.sec-badge.reconsider { background: #f59e0b; color: black; }
+.sec-badge.caution { background: #eab308; color: black; }
+
+.sec-source {
+    font-size: 10px;
+    color: #888;
+}
+
+.sec-title {
+    color: #ffaa00;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.sec-title:hover {
+    text-decoration: underline;
+}
+
+.sec-description {
+    font-size: 11px;
+    color: #aaa;
+    margin: 6px 0;
+    line-height: 1.4;
+}
+
+.sec-time {
+    font-size: 10px;
+    color: #666;
+}
+
+.sec-empty {
+    text-align: center;
+    padding: 30px;
+    color: #666;
+    font-size: 12px;
+}
+
 /* Thanh cuộn cho danh sách sự kiện bên trong Popup */
 .event-scroll-list::-webkit-scrollbar { width: 5px; }
 .event-scroll-list::-webkit-scrollbar-thumb { background: #ff4444; border-radius: 5px; }

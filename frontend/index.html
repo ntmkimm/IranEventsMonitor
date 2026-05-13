@@ -25,6 +25,7 @@
             
             <button id="btn-refresh-acled" style="color: #ffaa00; border-color: #ffaa00;">⚠️ SYNC EVENTS</button>
             <button id="btn-refresh-oil" style="color: #00ffff; border-color: #00ffff;">🛢️ SYNC OIL</button>
+            <button id="btn-refresh-security" style="color: #00ffaa; border-color: #00ffaa;">🛡️ SYNC SECURITY</button>
         </div>
     </header>
 
@@ -32,6 +33,39 @@
         <section id="map-container">
             <div id="globe-viz" style="display: none;"></div>
             <div id="map-2d" style="display: block; width: 100%; height: 100%;"></div>
+        </section>
+        
+        <!-- THÊM PANEL WEBCAM & SECURITY -->
+        <section id="dashboard-panels">
+            <!-- Webcam Panel -->
+            <div id="webcam-panel" class="info-panel">
+                <div class="panel-header">
+                    <span class="panel-title">📹 LIVE WEBCAMS</span>
+                    <div class="webcam-controls">
+                        <button id="webcam-grid-view" class="webcam-view-btn active">⊞ Grid</button>
+                        <button id="webcam-single-view" class="webcam-view-btn">⊡ Single</button>
+                        <button id="webcam-fullscreen" class="webcam-fullscreen-btn">⤢</button>
+                    </div>
+                </div>
+                <div id="webcam-content" class="panel-content">
+                    <div class="webcam-placeholder">Loading webcams...</div>
+                </div>
+            </div>
+            
+            <!-- Security Advisories Panel -->
+            <div id="security-panel" class="info-panel">
+                <div class="panel-header">
+                    <span class="panel-title">⚠️ SECURITY ADVISORIES</span>
+                    <div class="security-filters">
+                        <button class="sec-filter active" data-filter="all">All</button>
+                        <button class="sec-filter" data-filter="critical">Critical</button>
+                        <button class="sec-filter" data-filter="US">🇺🇸 US</button>
+                    </div>
+                </div>
+                <div id="security-content" class="panel-content">
+                    <div class="sec-placeholder">Loading security advisories...</div>
+                </div>
+            </div>
         </section>
     </main>
 
