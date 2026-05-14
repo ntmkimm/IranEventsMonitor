@@ -2,15 +2,15 @@
     {
         "symbol": "BZ=F",
         "name": "Brent Crude",
-        "price": 105.76,
-        "change_pct": 0.123,
-        "timestamp": "2026-05-14T02:35:20.942096+00:00"
+        "price": 106.02,
+        "change_pct": 0.369,
+        "timestamp": "2026-05-14T19:33:38.419062+00:00"
     },
     {
         "symbol": "CL=F",
         "name": "WTI Crude",
-        "price": 101.19,
-        "change_pct": 0.168,
-        "timestamp": "2026-05-14T02:35:21.337048+00:00"
+        "price": 101.55,
+        "change_pct": 0.525,
+        "timestamp": "2026-05-14T19:33:38.684765+00:00"
     }
 ]

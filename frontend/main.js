@@ -1,4 +1,5 @@
 
+// frontend/main.js - Frontend logic for World Monitor Dashboard
 const API_URL = 'http://localhost:3000/api/events';
 const REFRESH_URL = 'http://localhost:3000/api/refresh';
 
@@ -491,6 +492,115 @@ function setupAllRefreshButtons() {
     if (btnSecurity) btnSecurity.onclick = () => handleSync(btnSecurity, 'http://localhost:3000/api/refresh/security', 'security');
 }
 
+
+// Thêm vào đầu file main.js
+const API_BASE = 'http://localhost:3000/api';
+
+// 1. TẢI VÀ RENDER LIVEUAMAP (BẢN ĐỒ + DANH SÁCH)
+async function loadLiveuamap() {
+    try {
+        const res = await fetch(`${API_BASE}/liveuamap`);
+        const data = await res.json();
+        const events = data.events || [];
+
+        // Render Marker lên bản đồ 2D (Nếu đang ở chế độ 2D)
+        if (myMap2D) {
+            events.forEach(ev => {
+                const lat = ev.coordinates?.lat;
+                const lon = ev.coordinates?.lon;
+                if (lat && lon) {
+                    L.circleMarker([lat, lon], {
+                        radius: 6,
+                        fillColor: "#ffaa00", // Màu cam đặc trưng Liveuamap
+                        color: "#fff",
+                        weight: 1,
+                        fillOpacity: 0.9
+                    }).addTo(myMap2D)
+                      .bindPopup(`<b>LIVEUAMAP</b><br>${ev.title}<br><small>${ev.time}</small>`);
+                }
+            });
+        }
+
+        // Render List Panel
+        const container = document.getElementById('liveua-content');
+        container.innerHTML = events.slice(0, 20).map(ev => `
+            <div class="liveua-item">
+                <div style="color: #ffaa00; font-weight: bold; margin-bottom: 3px;">${ev.time}</div>
+                <div>${ev.title}</div>
+            </div>
+        `).join('');
+    } catch (e) { console.error("Liveuamap error:", e); }
+}
+
+// 2. TẢI VÀ RENDER TELEGRAM
+async function loadTelegram() {
+    try {
+        const res = await fetch(`${API_BASE}/telegram?limit=15`);
+        const data = await res.json();
+        const container = document.getElementById('telegram-content');
+        
+        container.innerHTML = data.posts.map(post => `
+            <div class="tg-item">
+                <div class="tg-header">
+                    <span class="tg-label">@${post.channel_label}</span>
+                    <span class="tg-time">${post.time_ago}</span>
+                </div>
+                <div class="tg-text">${post.preview_text}</div>
+                <a href="${post.url}" target="_blank" class="tg-link">View Original Post</a>
+            </div>
+        `).join('');
+    } catch (e) { console.error("Telegram error:", e); }
+}
+
+// 3. TẢI VÀ RENDER POLYMARKET
+async function loadPolymarket() {
+    try {
+        const res = await fetch(`${API_BASE}/polymarket`);
+        const data = await res.json();
+        const container = document.getElementById('polymarket-content');
+        
+        container.innerHTML = data.markets.map(m => `
+            <div class="poly-item">
+                <span class="poly-title">${m.title}</span>
+                <div class="poly-stats">
+                    <span class="poly-vol">${m.display_volume} Vol</span>
+                    <div class="poly-bar-container">
+                        <div class="poly-bar-fill" style="width: ${m.yes_price}%"></div>
+                    </div>
+                    <span class="poly-prob">${m.yes_price}%</span>
+                </div>
+            </div>
+        `).join('');
+    } catch (e) { console.error("Polymarket error:", e); }
+}
+
+// 4. CẬP NHẬT HÀM REFRESH
+function setupNewRefreshButtons() {
+    const configs = [
+        { id: 'btn-refresh-liveuamap', url: '/refresh/liveuamap', callback: loadLiveuamap },
+        { id: 'btn-refresh-telegram', url: '/refresh/telegram', callback: loadTelegram },
+        { id: 'btn-refresh-polymarket', url: '/refresh/polymarket', callback: loadPolymarket }
+    ];
+
+    configs.forEach(cfg => {
+        const btn = document.getElementById(cfg.id);
+        if (!btn) return;
+        btn.onclick = async () => {
+            btn.innerText = '⏳...';
+            btn.disabled = true;
+            try {
+                await fetch(`${API_BASE}${cfg.url}`, { method: 'POST' });
+                setTimeout(async () => {
+                    await cfg.callback();
+                    btn.innerText = '✅ OK';
+                    setTimeout(() => { btn.innerText = btn.innerText.replace('✅ OK', cfg.id.split('-')[2].toUpperCase()); btn.disabled = false; }, 2000);
+                }, 2000);
+            } catch (e) { btn.innerText = '❌'; btn.disabled = false; }
+        };
+    });
+}
+
+
 // Khởi tạo tất cả
 async function init() {
     // Init existing dashboard
@@ -504,6 +614,10 @@ async function init() {
     setupWebcamControls();
     setupSecurityFilters();
     await loadSecurityAdvisories();
+
+    await loadLiveuamap();
+    await loadTelegram();
+    await loadPolymarket();
     
     // Auto refresh security every 5 minutes
     setInterval(loadSecurityAdvisories, 300000);

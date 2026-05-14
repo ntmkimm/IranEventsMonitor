@@ -1,3 +1,4 @@
+/* frontend/style.css - Styles for World Monitor Dashboard */
 /* 1. RESET CƠ BẢN VÀ BỐ CỤC CHÍNH */
 body, html {
     margin: 0;
@@ -321,3 +322,32 @@ body, html {
 /* Thanh cuộn cho danh sách sự kiện bên trong Popup */
 .event-scroll-list::-webkit-scrollbar { width: 5px; }
 .event-scroll-list::-webkit-scrollbar-thumb { background: #ff4444; border-radius: 5px; }
+
+
+
+
+/* Telegram Card */
+.tg-item {
+    padding: 10px;
+    border-bottom: 1px solid #222;
+    background: rgba(0, 136, 204, 0.05);
+    margin-bottom: 5px;
+    border-radius: 4px;
+}
+.tg-header { display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 5px; }
+.tg-label { color: #0088cc; font-weight: bold; }
+.tg-time { color: #666; }
+.tg-text { font-size: 11px; line-height: 1.4; color: #ccc; }
+.tg-link { color: #0088cc; text-decoration: none; font-size: 10px; display: block; margin-top: 5px; }
+
+/* Polymarket Card */
+.poly-item { padding: 10px; border-bottom: 1px solid #222; }
+.poly-title { font-size: 11px; font-weight: bold; color: #e0e0e0; margin-bottom: 8px; display: block; }
+.poly-stats { display: flex; justify-content: space-between; align-items: center; }
+.poly-bar-container { flex: 1; height: 6px; background: #222; border-radius: 3px; margin: 0 10px; overflow: hidden; }
+.poly-bar-fill { height: 100%; background: #8b5cf6; transition: width 0.5s; }
+.poly-prob { color: #8b5cf6; font-size: 12px; font-weight: bold; min-width: 35px; }
+.poly-vol { font-size: 9px; color: #555; }
+
+/* Liveuamap Card */
+.liveua-item { padding: 8px; border-left: 2px solid #ffaa00; background: rgba(255, 170, 0, 0.05); margin-bottom: 5px; font-size: 11px; }

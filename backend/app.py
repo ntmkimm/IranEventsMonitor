@@ -8,11 +8,15 @@ from datetime import datetime
 import requests
 import xml.etree.ElementTree as ET
 from apscheduler.schedulers.background import BackgroundScheduler
+import threading
+
+# Import Panels
 from panels.webcam_panel import webcam_panel
 from panels.map_panel import map_panel
 from panels.security_panel import security_panel
-from panels.liveuamap_panel import liveuamap_panel  # THÊM IMPORT CHO LIVEUAMAP
-import threading
+from panels.liveuamap_panel import liveuamap_panel
+from panels.telegram_panel import telegram_panel      # MỚI
+from panels.polymarket_panel import polymarket_panel  # MỚI
 
 app = Flask(__name__)
 CORS(app)
@@ -49,17 +53,7 @@ def run_security_crawl():
             print("✅ Security crawl completed")
         else:
             print(f"❌ Security crawl failed: {result.stderr}")
-    else:
-        print("⚠️ crawl_security.py not found, using fallback")
-        # Fallback: gọi trực tiếp hàm crawl trong file mới
-        try:
-            from crawlers.security_crawler import SecurityCrawler
-            crawler = SecurityCrawler()
-            crawler.crawl()
-        except:
-            pass
 
-# THÊM HÀM CRAWL CHO LIVEUAMAP
 def run_liveuamap_crawl():
     """Chạy crawl Liveuamap events"""
     print("🗺️ Running Liveuamap crawl...")
@@ -70,14 +64,34 @@ def run_liveuamap_crawl():
             print("✅ Liveuamap crawl completed")
         else:
             print(f"❌ Liveuamap crawl failed: {result.stderr}")
-    else:
-        print("⚠️ liveuamap_crawler.py not found")
 
-# ============ API ENDPOINTS CŨ ============
+def run_telegram_crawl():
+    """Chạy crawl Telegram channels"""
+    print("📢 Running Telegram crawl...")
+    script_path = os.path.join(os.path.dirname(__file__), 'crawlers', 'telegram_crawler.py')
+    if os.path.exists(script_path):
+        result = subprocess.run(['python', script_path], capture_output=True, text=True)
+        if result.returncode == 0:
+            print("✅ Telegram crawl completed")
+        else:
+            print(f"❌ Telegram crawl failed: {result.stderr}")
+
+def run_polymarket_crawl():
+    """Chạy crawl Polymarket predictions"""
+    print("📊 Running Polymarket crawl...")
+    script_path = os.path.join(os.path.dirname(__file__), 'crawlers', 'polymarket_crawler.py')
+    if os.path.exists(script_path):
+        result = subprocess.run(['python', script_path], capture_output=True, text=True)
+        if result.returncode == 0:
+            print("✅ Polymarket crawl completed")
+        else:
+            print(f"❌ Polymarket crawl failed: {result.stderr}")
+
+# ============ API ENDPOINTS ============
 
 @app.route('/api/events', methods=['GET'])
 def get_events():
-    """Lấy dữ liệu sự kiện từ ACLED"""
+    """ACLED data"""
     try:
         data_path = os.path.join(os.path.dirname(__file__), 'data', 'iran_protests_clean.json')
         if os.path.exists(data_path):
@@ -86,91 +100,109 @@ def get_events():
             return jsonify(data)
         return jsonify([])
     except Exception as e:
-        print(f"Error reading events: {e}")
         return jsonify([])
 
 @app.route('/api/oil', methods=['GET'])
 def get_oil():
-    """Lấy dữ liệu giá dầu"""
+    """Oil prices"""
     try:
         data_path = os.path.join(os.path.dirname(__file__), 'data', 'oil_prices.json')
         if os.path.exists(data_path):
             with open(data_path, 'r', encoding='utf-8') as f:
                 data = json.load(f)
-            # Kiểm tra cấu trúc dữ liệu
             if isinstance(data, dict) and 'data' in data:
                 return jsonify(data['data'])
             return jsonify(data)
         return jsonify([])
-    except Exception as e:
-        print(f"Error reading oil data: {e}")
+    except:
         return jsonify([])
 
 @app.route('/api/security', methods=['GET'])
 def get_security():
-    """Lấy dữ liệu cảnh báo an ninh"""
+    """Security advisories"""
     try:
-        data_path = os.path.join(os.path.dirname(__file__), 'data', 'security_advisories.json')
-        if os.path.exists(data_path):
-            with open(data_path, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-            # Trả về đúng cấu trúc frontend mong đợi
-            if 'data' in data:
-                return jsonify(data['data'])
-            return jsonify(data)
-        return jsonify({'advisories':[], 'totalCount': 0})
-    except Exception as e:
-        print(f"Error reading security data: {e}")
+        data = security_panel.load_security()
+        return jsonify(data)
+    except:
         return jsonify({'advisories':[], 'totalCount': 0})
 
-# THÊM API ENDPOINT CHO LIVEUAMAP
 @app.route('/api/liveuamap', methods=['GET'])
 def get_liveuamap():
-    """Lấy dữ liệu sự kiện từ Liveuamap"""
+    """Liveuamap events"""
     try:
-        # Sử dụng panel để format dữ liệu cho sạch sẽ
         data = liveuamap_panel.load_events()
         return jsonify(data)
     except Exception as e:
         print(f"Error reading liveuamap data: {e}")
         return jsonify({'events':[], 'totalCount': 0})
 
+@app.route('/api/telegram', methods=['GET'])
+def get_telegram():
+    """Telegram feed data"""
+    try:
+        limit = request.args.get('limit', default=20, type=int)
+        data = telegram_panel.get_posts_for_display(limit=limit)
+        meta = telegram_panel.load_telegram()
+        return jsonify({
+            'posts': data,
+            'totalCount': meta.get('total_posts', 0),
+            'updatedAt': meta.get('updatedAt')
+        })
+    except Exception as e:
+        print(f"Error reading telegram data: {e}")
+        return jsonify({'posts': [], 'totalCount': 0})
+
+@app.route('/api/polymarket', methods=['GET'])
+def get_polymarket():
+    """Polymarket predictions"""
+    try:
+        data = polymarket_panel.get_markets_for_display()
+        meta = polymarket_panel.load_polymarket()
+        return jsonify({
+            'markets': data,
+            'stats': meta.get('stats', {}),
+            'fetchedAt': meta.get('fetched_at')
+        })
+    except Exception as e:
+        print(f"Error reading polymarket data: {e}")
+        return jsonify({'markets': [], 'stats': {}})
+
 # ============ REFRESH API ============
 
 @app.route('/api/refresh/acled', methods=['POST'])
 def refresh_acled():
-    """Kích hoạt crawl ACLED thủ công"""
-    thread = threading.Thread(target=run_acled_crawl)
-    thread.start()
+    threading.Thread(target=run_acled_crawl).start()
     return jsonify({'message': 'ACLED crawl started'})
 
 @app.route('/api/refresh/oil', methods=['POST'])
 def refresh_oil():
-    """Kích hoạt crawl oil thủ công"""
-    thread = threading.Thread(target=run_oil_crawl)
-    thread.start()
+    threading.Thread(target=run_oil_crawl).start()
     return jsonify({'message': 'Oil crawl started'})
 
 @app.route('/api/refresh/security', methods=['POST'])
 def refresh_security():
-    """Kích hoạt crawl security thủ công"""
-    thread = threading.Thread(target=run_security_crawl)
-    thread.start()
+    threading.Thread(target=run_security_crawl).start()
     return jsonify({'message': 'Security crawl started'})
 
-# THÊM REFRESH API CHO LIVEUAMAP
 @app.route('/api/refresh/liveuamap', methods=['POST'])
 def refresh_liveuamap():
-    """Kích hoạt crawl Liveuamap thủ công"""
-    thread = threading.Thread(target=run_liveuamap_crawl)
-    thread.start()
+    threading.Thread(target=run_liveuamap_crawl).start()
     return jsonify({'message': 'Liveuamap crawl started'})
 
-# ============ API CHO WEBCAM ============
+@app.route('/api/refresh/telegram', methods=['POST'])
+def refresh_telegram():
+    threading.Thread(target=run_telegram_crawl).start()
+    return jsonify({'message': 'Telegram crawl started'})
+
+@app.route('/api/refresh/polymarket', methods=['POST'])
+def refresh_polymarket():
+    threading.Thread(target=run_polymarket_crawl).start()
+    return jsonify({'message': 'Polymarket crawl started'})
+
+# ============ WEBCAM API ============
 
 @app.route('/api/webcams', methods=['GET'])
 def get_webcams():
-    """Lấy danh sách webcam"""
     region = request.args.get('region', 'all')
     if region == 'all':
         data = webcam_panel.get_webcams()
@@ -181,25 +213,13 @@ def get_webcams():
 
 @app.route('/api/webcams/<webcam_id>', methods=['GET'])
 def get_webcam_by_id(webcam_id):
-    """Lấy thông tin webcam theo ID"""
     webcam = webcam_panel.get_webcam_by_id(webcam_id)
-    if webcam:
-        return jsonify(webcam)
-    return jsonify({'error': 'Webcam not found'}), 404
-
-@app.route('/api/webcams/embed/<video_id>', methods=['GET'])
-def get_embed_url(video_id):
-    """Tạo URL embed YouTube"""
-    autoplay = request.args.get('autoplay', 'true').lower() == 'true'
-    mute = request.args.get('mute', 'true').lower() == 'true'
-    url = webcam_panel.get_embed_url(video_id, autoplay, mute)
-    return jsonify({'embedUrl': url})
+    return jsonify(webcam) if webcam else (jsonify({'error': 'Webcam not found'}), 404)
 
 # ============ HEALTH CHECK ============
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
-    """Kiểm tra trạng thái các service"""
     return jsonify({
         'status': 'ok',
         'timestamp': datetime.now().isoformat(),
@@ -207,23 +227,27 @@ def health_check():
             'acled': os.path.exists(os.path.join(os.path.dirname(__file__), 'data', 'iran_protests_clean.json')),
             'oil': os.path.exists(os.path.join(os.path.dirname(__file__), 'data', 'oil_prices.json')),
             'security': os.path.exists(os.path.join(os.path.dirname(__file__), 'data', 'security_advisories.json')),
-            'liveuamap': os.path.exists(os.path.join(os.path.dirname(__file__), 'data', 'iran-events-latest.json')) # THÊM HEALTH CHECK LIVEUAMAP
+            'liveuamap': os.path.exists(os.path.join(os.path.dirname(__file__), 'data', 'iran-events-latest.json')),
+            'telegram': os.path.exists(os.path.join(os.path.dirname(__file__), 'data', 'telegram_results.json')),
+            'polymarket': os.path.exists(os.path.join(os.path.dirname(__file__), 'data', 'polymarket-results.json'))
         }
     })
 
 # ============ SCHEDULER ============
 
 scheduler = BackgroundScheduler()
-# Chỉ schedule security crawl tự động (5 phút/lần)
-scheduler.add_job(run_security_crawl, 'interval', minutes=5)
+scheduler.add_job(run_security_crawl, 'interval', minutes=10)
+scheduler.add_job(run_liveuamap_crawl, 'interval', minutes=15)
+scheduler.add_job(run_telegram_crawl, 'interval', minutes=20)
 scheduler.start()
 
-# Chạy các crawl lần đầu khi khởi động
+# Chạy lần đầu khi khởi động
 print("🔄 Running initial crawls...")
-# run_acled_crawl()
 run_oil_crawl()
 run_security_crawl()
-run_liveuamap_crawl()  # THÊM RUN LẦN ĐẦU CHO LIVEUAMAP
+run_liveuamap_crawl()
+run_telegram_crawl()
+run_polymarket_crawl()
 
 # ============ MAIN ============
 
@@ -232,14 +256,11 @@ if __name__ == '__main__':
     print("🚀 US-IRAN CRISIS MONITOR BACKEND")
     print("=" * 50)
     print(f"📡 API available at: http://localhost:3000")
-    print(f"   - GET  /api/events     (ACLED events)")
-    print(f"   - GET  /api/oil        (Oil prices)")
-    print(f"   - GET  /api/security   (Security advisories)")
-    print(f"   - GET  /api/liveuamap  (Liveuamap events)") # THÊM LOG CHỈ DẪN
-    print(f"   - POST /api/refresh/acled")
-    print(f"   - POST /api/refresh/oil")
-    print(f"   - POST /api/refresh/security")
-    print(f"   - POST /api/refresh/liveuamap")             # THÊM LOG CHỈ DẪN
-    print(f"   - GET  /api/health     (Health check)")
+    print(f"   - [GET]  /api/liveuamap")
+    print(f"   - [GET]  /api/telegram")
+    print(f"   - [GET]  /api/polymarket")
+    print(f"   - [POST] /api/refresh/liveuamap")
+    print(f"   - [POST] /api/refresh/telegram")
+    print(f"   - [POST] /api/refresh/polymarket")
     print("=" * 50)
     app.run(host='0.0.0.0', port=3000, debug=True)

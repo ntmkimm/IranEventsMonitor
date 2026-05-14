@@ -1,133 +1,149 @@
 import os
 import sys
 import asyncio
+import json
 from datetime import datetime
+from pathlib import Path
 from dotenv import load_dotenv
 from telethon import TelegramClient
 from telethon.sessions import StringSession
 from telethon.errors import AuthKeyDuplicatedError, FloodWaitError
 
-# Ép UTF-8 cho Terminal để in emoji không bị lỗi trên Windows
+# Force UTF-8 for Windows terminal compatibility
 if sys.stdout.encoding and sys.stdout.encoding.lower() != 'utf-8':
     sys.stdout.reconfigure(encoding='utf-8')
 
-# Load biến môi trường từ file .env
+# --- Configuration & Paths ---
 load_dotenv()
 
-api_id_str = os.environ.get('TELEGRAM_API_ID', '')
-api_hash = os.environ.get('TELEGRAM_API_HASH', '')
-session_str = os.environ.get('TELEGRAM_SESSION', '')
+# Get the absolute path of the backend directory
+# Current file is in /backend/crawlers/, so parent is /backend/
+BASE_DIR = Path(__file__).resolve().parent.parent
+CONFIG_FILE = BASE_DIR / "data" / "telegram-channels.json"
+OUTPUT_FILE = BASE_DIR / "data" / "telegram_results.json"
 
-if not api_id_str or not api_hash or not session_str:
-    print("❌ Thiếu TELEGRAM_API_ID, TELEGRAM_API_HASH, hoặc TELEGRAM_SESSION trong file .env")
-    sys.exit(1)
+API_ID = os.environ.get('TELEGRAM_API_ID')
+API_HASH = os.environ.get('TELEGRAM_API_HASH')
+SESSION_STR = os.environ.get('TELEGRAM_SESSION')
 
-try:
-    api_id = int(api_id_str)
-except ValueError:
-    print("❌ TELEGRAM_API_ID phải là một số.")
-    sys.exit(1)
-
-# Giới hạn 15s cho mỗi hành động theo đúng chuẩn kiến trúc của bạn
 TELEGRAM_CHANNEL_TIMEOUT_SEC = 15.0
-TELEGRAM_MAX_TEXT_CHARS = 800
+TELEGRAM_MAX_TEXT_CHARS = 1000  # Increased slightly for better data quality
 
 async def main():
-    print("⏳ Đang kết nối tới Telegram (MTProto)...")
+    if not API_ID or not API_HASH or not SESSION_STR:
+        print("❌ Error: Missing Telegram credentials in .env")
+        return
+
+    # 1. Load Channel Configuration
+    if not CONFIG_FILE.exists():
+        print(f"❌ Error: Config file not found at {CONFIG_FILE}")
+        return
+
+    with open(CONFIG_FILE, 'r', encoding='utf-8') as f:
+        config_data = json.load(f)
+
+    # Flatten all enabled channels from all categories (full, tech, etc.)
+    channels_to_crawl = []
+    for category in config_data.get('channels', {}):
+        for ch in config_data['channels'][category]:
+            if ch.get('region') != 'iran':
+                continue
+            if ch.get('enabled'):
+                channels_to_crawl.append(ch)
+
+    print(f"📂 Loaded {len(channels_to_crawl)} enabled channels from config.")
+
+    # 2. Initialize Telegram Client
+    client = TelegramClient(StringSession(SESSION_STR), int(API_ID), API_HASH)
     
-    # Khởi tạo Client
-    client = TelegramClient(
-        StringSession(session_str), 
-        api_id, 
-        api_hash, 
-        connection_retries=3
-    )
+    all_extracted_posts = []
 
     try:
         await client.connect()
-        
-        # Kiểm tra xem session có thực sự hợp lệ không
         if not await client.is_user_authorized():
-            print("❌ Session không hợp lệ hoặc đã hết hạn.")
+            print("❌ Session invalid or expired.")
             return
+
+        print("✅ Telegram Connected.\n")
+
+        for ch_config in channels_to_crawl:
+            handle = ch_config['handle']
+            max_msgs = ch_config.get('maxMessages', 10)
             
-        print("✅ Đã kết nối Telegram thành công!\n")
-
-        # Chỉ test 2 kênh để đảm bảo an toàn cho tài khoản
-        channels_to_test = ['VahidOnline', 'abualiexpress']
-
-        for handle in channels_to_test:
-            print(f"📡 Đang lấy dữ liệu từ kênh: @{handle}")
+            print(f"📡 Crawling @{handle} (Limit: {max_msgs})...")
             
             try:
-                # 1. Lấy thông tin Entity của kênh (có timeout 15s)
-                # Sử dụng asyncio.wait_for thay cho hàm withTimeout tự viết
+                # Get Entity
                 entity = await asyncio.wait_for(
                     client.get_entity(handle),
                     timeout=TELEGRAM_CHANNEL_TIMEOUT_SEC
                 )
 
-                # 2. Lấy 3 tin nhắn mới nhất (có timeout 15s)
+                # Get Messages
                 msgs = await asyncio.wait_for(
-                    client.get_messages(entity, limit=3),
+                    client.get_messages(entity, limit=max_msgs),
                     timeout=TELEGRAM_CHANNEL_TIMEOUT_SEC
                 )
 
-                count = 0
+                channel_posts_count = 0
                 for msg in msgs:
-                    if not msg or not msg.id:
+                    if not msg or not msg.text:
                         continue
                     
-                    # msg.text lấy text của tin nhắn (hoặc caption của ảnh/video)
-                    text = msg.text
+                    # Clean and truncate text
+                    clean_text = msg.text.strip()
+                    if len(clean_text) > TELEGRAM_MAX_TEXT_CHARS:
+                        clean_text = clean_text[:TELEGRAM_MAX_TEXT_CHARS] + "..."
+
+                    # Prepare data object
+                    post_data = {
+                        "channel_handle": handle,
+                        "channel_label": ch_config.get('label'),
+                        "post_id": msg.id,
+                        "date": msg.date.isoformat() if msg.date else None,
+                        "text": clean_text,
+                        "topic": ch_config.get('topic'),
+                        "region": ch_config.get('region'),
+                        "tier": ch_config.get('tier'),
+                        "url": f"https://t.me/{handle}/{msg.id}"
+                    }
                     
-                    # Bỏ qua nếu tin nhắn chỉ có Media (ảnh/video) mà không có Text
-                    if not text:
-                        print(f"   ⏭️  Bỏ qua tin nhắn ID: {msg.id} (Chỉ có Media, không text)")
-                        continue
+                    all_extracted_posts.append(post_data)
+                    channel_posts_count += 1
 
-                    # Cắt ngắn chuỗi nếu quá dài
-                    if len(text) > TELEGRAM_MAX_TEXT_CHARS:
-                        text = text[:TELEGRAM_MAX_TEXT_CHARS] + '... [ĐÃ CẮT NGẮN]'
-                    
-                    # Format thời gian (chuyển datetime UTC sang timezone của máy)
-                    if msg.date:
-                        ts = msg.date.astimezone().strftime('%d/%m/%Y %H:%M:%S')
-                    else:
-                        ts = 'Unknown Time'
-
-                    print(f"\n   🔹[{ts}] ID: {msg.id}")
-                    print(f"   📝 Nội dung: {text.replace(chr(10), ' ↵ ')}")
-                    count += 1
+                print(f"   ✅ Extracted {channel_posts_count} posts.")
                 
-                print(f"\n✅ Lấy thành công {count} tin nhắn từ @{handle}\n-----------------------------------")
-                
-                # Nghỉ 1 giây trước khi qua kênh tiếp theo để chống Flood
-                await asyncio.sleep(1)
+                # Anti-Flood Delay
+                await asyncio.sleep(1.5)
 
-            # --- Xử lý lỗi chuẩn của Python / Telethon ---
             except asyncio.TimeoutError:
-                print(f"❌ Lỗi timeout khi lấy dữ liệu kênh {handle} sau {TELEGRAM_CHANNEL_TIMEOUT_SEC}s")
-                
-            except AuthKeyDuplicatedError:
-                print("🚨 Session bị vô hiệu hóa (AUTH_KEY_DUPLICATED) — Bạn đang đăng nhập ở 2 nơi cùng lúc!")
-                break
-                
+                print(f"   ⚠️ Timeout skipping @{handle}")
             except FloodWaitError as e:
-                # Telethon tự động bóc tách số giây đợi vào e.seconds
-                print(f"🚨 Bị Telegram giới hạn (FLOOD_WAIT) {e.seconds} giây — Ngừng chu kỳ sớm!")
+                print(f"   🚨 FloodWait: Need to wait {e.seconds}s. Stopping crawl.")
                 break
-                
             except Exception as e:
-                print(f"❌ Lỗi khi lấy dữ liệu kênh {handle}: {e}")
+                print(f"   ❌ Error crawling @{handle}: {e}")
 
-    except Exception as err:
-        print(f"❌ Lỗi kết nối khởi tạo: {err}")
+        # 3. Save Results to JSON
+        output_payload = {
+            "updatedAt": datetime.utcnow().isoformat() + "Z",
+            "total_posts": len(all_extracted_posts),
+            "posts": all_extracted_posts
+        }
+
+        # Ensure directory exists
+        OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
+        
+        with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
+            json.dump(output_payload, f, ensure_ascii=False, indent=2)
+
+        print(f"\n✨ Successfully saved {len(all_extracted_posts)} posts to {OUTPUT_FILE}")
+
+    except Exception as e:
+        print(f"❌ Global error: {e}")
     finally:
-        print("🔌 Đang ngắt kết nối an toàn...")
-        if client.is_connected():
-            await client.disconnect()
+        await client.disconnect()
+        print("🔌 Disconnected.")
 
 if __name__ == '__main__':
-    # Chạy event loop của asyncio
     asyncio.run(main())
