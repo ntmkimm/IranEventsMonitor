@@ -1,0 +1,307 @@
+{
+    "fetchedAt": "2026-05-14T02:28:23.938244",
+    "totalCount": 30,
+    "source": "https://iran.liveuamap.com/",
+    "events": [
+        {
+            "id": "22842103",
+            "title": "Reuters, citing security sources: A drone strike targeted an Iranian opposition camp north of Erbil in Iraq.",
+            "time": "7 hours ago",
+            "source": "https://twitter.com/lbci_news/status/2054649162541519031",
+            "coordinates": {
+                "lat": null,
+                "lon": null
+            }
+        },
+        {
+            "id": "22842053",
+            "title": "The Prime Minister's Office confirms that, in the midst of Operation Roaring Lion, Benjamin Netanyahu made a secret trip to the UAE, where he met with President Mohammed bin Zayed Al Nahyan. The covert visit reportedly led to a historic breakthrough in Israel–UAE relations",
+            "time": "9 hours ago",
+            "source": "https://twitter.com/amitsegal/status/2054608160942399794",
+            "coordinates": {
+                "lat": null,
+                "lon": null
+            }
+        },
+        {
+            "id": "22842011",
+            "title": "The head of Mossad visited the UAE at least twice during the Iran bombing campaign for the purpose of coordination about the war: WSJ",
+            "time": "16 hours ago",
+            "source": "https://x.com/guyelster/status/2054504269089218972",
+            "coordinates": {
+                "lat": null,
+                "lon": null
+            }
+        },
+        {
+            "id": "22842017",
+            "title": "Qatar’s energy minister says it doesn’t have plans to export any more LNG via Hormuz beyond the two that left this last week Via Energy Intelligence",
+            "time": "17 hours ago",
+            "source": "https://x.com/SStapczynski/status/2054497986017931358",
+            "coordinates": {
+                "lat": null,
+                "lon": null
+            }
+        },
+        {
+            "id": "22841858",
+            "title": "Fars News Agency, quoting a source: Tehran believes that without the implementation of its five conditions, there will be no possibility of entering into new negotiations.",
+            "time": "a day ago",
+            "source": "https://x.com/AJABreaking/status/2054266726544519266",
+            "coordinates": {
+                "lat": null,
+                "lon": null
+            }
+        },
+        {
+            "id": "22841848",
+            "title": "Kuwaiti Foreign Ministry: The Iranian ambassador was summoned and handed a protest note following the infiltration of a group from the Revolutionary Guard onto Bubiyan Island.",
+            "time": "a day ago",
+            "source": "https://x.com/AJABreaking/status/2054211002615411098",
+            "coordinates": {
+                "lat": null,
+                "lon": null
+            }
+        },
+        {
+            "id": "22841839",
+            "title": "Iranian Defense Ministry spokesman: Any new aggression by the  will be met with an immediate, decisive, and firm response.",
+            "time": "2 days ago",
+            "source": "https://x.com/AJABreaking/status/2054202941066592328",
+            "coordinates": {
+                "lat": null,
+                "lon": null
+            }
+        },
+        {
+            "id": "22841838",
+            "title": "Iran’s Foreign Minister Araghchi will travel to India to attend the BRICS foreign ministers’ meeting, the Foreign Ministry says",
+            "time": "2 days ago",
+            "source": "https://x.com/FaytuksNetwork/status/2054174452691136728",
+            "coordinates": {
+                "lat": null,
+                "lon": null
+            }
+        },
+        {
+            "id": "22841835",
+            "title": "Tehran warns of 90% uranium enrichment if attacked again by US, Israel",
+            "time": "2 days ago",
+            "source": "https://x.com/AJENews/status/2054093123496611955",
+            "coordinates": {
+                "lat": null,
+                "lon": null
+            }
+        },
+        {
+            "id": "22841815",
+            "title": "Pakistan refuted a @CBSNews report on the presence of Iranian aircraft at its NurKhanAirbase near Islamabad, calling it misleading and sensationalized. The foreign ministry expressed concern that such narratives could be intended to undermine efforts to resolve the US-Iran conflict",
+            "time": "2 days ago",
+            "source": "https://x.com/AyazGul64/status/2054074844413858022",
+            "coordinates": {
+                "lat": null,
+                "lon": null
+            }
+        },
+        {
+            "id": "22841747",
+            "title": "Pakistan \"quietly allowed Iranian military aircraft to park in its country, potentially shielding them from US airstrikes\" - @CBSNews",
+            "time": "2 days ago",
+            "source": "https://x.com/vvanwilgenburg/status/2053923908286369822",
+            "coordinates": {
+                "lat": null,
+                "lon": null
+            }
+        },
+        {
+            "id": "22841734",
+            "title": "The U.S. Treasury Department has imposed new sanctions related to the Islamic Republic",
+            "time": "2 days ago",
+            "source": "https://x.com/IranIntlbrk/status/2053915512141226121",
+            "coordinates": {
+                "lat": null,
+                "lon": null
+            }
+        },
+        {
+            "id": "22841742",
+            "title": "US President Donald Trump says he is “very disappointed in the Kurds” as he accuses Kurdish groups of failing to provide weapons to Iranian protesters",
+            "time": "2 days ago",
+            "source": "https://x.com/AlArabiya_Eng/status/2053913770594836932",
+            "coordinates": {
+                "lat": null,
+                "lon": null
+            }
+        },
+        {
+            "id": "22841685",
+            "title": "Trump: \"They were unarmed protesters. Not at all violent protesters. And they started shooting them.\"",
+            "time": "2 days ago",
+            "source": "https://x.com/atrupar/status/2053863826433458297",
+            "coordinates": {
+                "lat": null,
+                "lon": null
+            }
+        },
+        {
+            "id": "22841681",
+            "title": "US Central Command said its forces had redirected 62 commercial ships and disabled four since the blockade against Iran came into effect on April 13",
+            "time": "3 days ago",
+            "source": "https://x.com/IranIntl_En/status/2053839585499545835",
+            "coordinates": {
+                "lat": null,
+                "lon": null
+            }
+        },
+        {
+            "id": "22841686",
+            "title": "Saudi Aramco CEO Amin Nasser says if the Strait of Hormuz opens today, then it will still take months for the market to rebalance",
+            "time": "3 days ago",
+            "source": "https://x.com/FaytuksNetwork/status/2053814088463970602",
+            "coordinates": {
+                "lat": null,
+                "lon": null
+            }
+        },
+        {
+            "id": "22841524",
+            "title": "Trump on Truth Social: Iran has been playing games with the United States, and the rest of the World, for 47 years (DELAY, DELAY, DELAY.), and then finally hit “pay dirt” when Barack Hussein Obama became President. He was not only good to them, he was great, actually going to their side, jettisoning Israel, and all other Allies, and giving Iran a major and very powerful new lease on life. Hundreds of Billions of Dollars, and 1.7 Billion Dollars in green cash, flown into Tehran, was handed to them on a silver platter. Every Bank in D.C., Virginia, and Maryland was emptied out — It was so much money that when it arrived, the Iranian Thugs had no idea what to do with it. They had never seen money like this, and never will again. It was taken off the plane in suitcases and satchels, and the Iranians couldn’t believe their luck. They finally found the greatest SUCKER of them all, in the form of a weak and stupid American President. He was a disaster as our “Leader,” but not as bad as Sleepy Joe Biden. For 47 years the Iranians have been “tapping” us along, keeping us waiting, killing our people with their roadside bombs, destroying protests, and recently wiping out 42,000, unarmed protestors, and laughing at our now GREAT AGAIN Country. They will be laughing no longer",
+            "time": "3 days ago",
+            "source": "https://x.com/BarakRavid/status/2053533868037419262",
+            "coordinates": {
+                "lat": null,
+                "lon": null
+            }
+        },
+        {
+            "id": "22841523",
+            "title": "Iranian Parliament's National Security and Foreign Policy Committee Spokesperson Ebrahim Rezaei: The war is not over yet, and we have not witnessed a genuine ceasefire.",
+            "time": "3 days ago",
+            "source": "https://x.com/Lebanon24/status/2053533726454190451",
+            "coordinates": {
+                "lat": null,
+                "lon": null
+            }
+        },
+        {
+            "id": "22841386",
+            "title": "An Iranian Foreign Ministry official: Operation Freedom has achieved no success for Washington and its allies, and our armed forces control the Strait of Hormuz",
+            "time": "5 days ago",
+            "source": "https://x.com/AlarabyTV/status/2053076370943521079",
+            "coordinates": {
+                "lat": null,
+                "lon": null
+            }
+        },
+        {
+            "id": "22841389",
+            "title": "Russia is using the Caspian Sea to quietly move military and commercial supplies to Iran, helping Tehran bypass U.S. pressure and sanctions. Source: NYT",
+            "time": "5 days ago",
+            "source": "https://twitter.com/clashreport/status/2053069464581623943",
+            "coordinates": {
+                "lat": null,
+                "lon": null
+            }
+        },
+        {
+            "id": "22841278",
+            "title": "Governor of Lengeh port in southern Iran: 6 wounded and 6 missing after US forces targeted Iranian ships on Thursday",
+            "time": "5 days ago",
+            "source": "https://twitter.com/ajabreaking/status/2052918639959883978",
+            "coordinates": {
+                "lat": null,
+                "lon": null
+            }
+        },
+        {
+            "id": "22841273",
+            "title": "CENTCOM: U.S. forces disabled the Iranian-flagged tankers Sea Star III and Sevda on May 8 as they attempted to enter an Iranian port in violation of the U.S. blockade. A U.S. Navy F/A-18 Super Hornet from USS George H.W. Bush struck both vessels’ smokestacks with precision munitions, preventing them from reaching Iran",
+            "time": "5 days ago",
+            "source": "https://x.com/clashreport/status/2052757675365085550",
+            "coordinates": {
+                "lat": null,
+                "lon": null
+            }
+        },
+        {
+            "id": "22841187",
+            "title": "Fox News, citing a US official: Airstrikes today targeted empty oil tankers attempting to breach the blockade on Iran. The targeted vessels were supertankers trying to return to Iran.",
+            "time": "6 days ago",
+            "source": "https://x.com/AlarabyTV/status/2052740726392279454",
+            "coordinates": {
+                "lat": null,
+                "lon": null
+            }
+        },
+        {
+            "id": "22841176",
+            "title": "UAE Defense Ministry: Air defenses intercepted two ballistic missiles and three drones",
+            "time": "6 days ago",
+            "source": "https://x.com/SawtBeirut/status/2052709717563089133",
+            "coordinates": {
+                "lat": null,
+                "lon": null
+            }
+        },
+        {
+            "id": "22841167",
+            "title": "Reports of a new attack on Bandar Abbas and Qeshm in southern Iran",
+            "time": "6 days ago",
+            "source": "https://x.com/kon_mowaten/status/2052699183962874242",
+            "coordinates": {
+                "lat": null,
+                "lon": null
+            }
+        },
+        {
+            "id": "22841151",
+            "title": "Chinese Foreign Ministry: No reports of injuries, even among the crew of the Chinese tanker in the Strait of Hormuz.",
+            "time": "6 days ago",
+            "source": "https://x.com/AlArabiya_Brk/status/2052649215398961361",
+            "coordinates": {
+                "lat": null,
+                "lon": null
+            }
+        },
+        {
+            "id": "22841136",
+            "title": "The UAE Ministry of Defense announces that its air defenses intercepted missile and drone attacks coming from Iranian territory.",
+            "time": "6 days ago",
+            "source": "https://x.com/AlarabyTV/status/2052640716438790181",
+            "coordinates": {
+                "lat": null,
+                "lon": null
+            }
+        },
+        {
+            "id": "22841147",
+            "title": "U.S. destroyers have made two Strait of Hormuz transits this week, both times under fire—this time U.S. forces hit back striking targets in Iran yesterday, including Qeshm Island and Bandar Abbas",
+            "time": "6 days ago",
+            "source": "https://x.com/LucasFoxNews/status/2052627339591483410",
+            "coordinates": {
+                "lat": null,
+                "lon": null
+            }
+        },
+        {
+            "id": "22841066",
+            "title": "President Trump tells in a phone call the retaliatory strikes against Iranian targets are just a \"love tap.\" \"It's just a love tap.\" When I asked if it means the ceasefire is over. \"No, no, the ceasefire is going. It's in effect",
+            "time": "6 days ago",
+            "source": "https://twitter.com/rachelvscott/status/2052515580784066672",
+            "coordinates": {
+                "lat": null,
+                "lon": null
+            }
+        },
+        {
+            "id": "22841062",
+            "title": "The American military confirms carrying out \"self-defense\" strikes in Iran in response to \"unprovoked Iranian attacks\" against US Navy missile destroyers that transited the Strait of Hormuz to the Gulf of Oman. \"Iranian forces launched multiple missiles, drones and small boats as USS Truxtun (DDG 103), USS Rafael Peralta (DDG 115), and USS Mason (DDG 87) transited the international sea passage,\" US Central Command says in a statement. CENTCOM says it intercepted the \"inbound threats,\" and \"no US assets were struck.\" In response, CENTCOM says it targeted Iranian military facilities \"responsible for attacking US forces.\" The targets included \"missile and drone launch sites, command and control locations, and intelligence, surveillance, and reconnaissance nodes,\" according to CENTCOM. \"CENTCOM does not seek escalation but remains positioned and ready to protect American forces,\" the statement adds.",
+            "time": "6 days ago",
+            "source": "https://twitter.com/manniefabian/status/2052504169400176655",
+            "coordinates": {
+                "lat": null,
+                "lon": null
+            }
+        }
+    ]
+}

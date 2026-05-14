@@ -1,6 +1,8 @@
 # Sử dụng Image chuẩn có sẵn cả Node.js và Python
 FROM nikolaik/python-nodejs:python3.11-nodejs20
 
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+
 # Tạo thư mục làm việc trong Container
 WORKDIR /app
 
@@ -11,6 +13,7 @@ COPY requirements.txt ./
 # Cài đặt thư viện cho Node và Python
 RUN npm install
 RUN pip install --no-cache-dir -r requirements.txt
+RUN playwright install --with-deps chromium
 
 # Copy toàn bộ code vào Container
 COPY . .

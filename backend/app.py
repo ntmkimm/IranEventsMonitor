@@ -11,6 +11,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from panels.webcam_panel import webcam_panel
 from panels.map_panel import map_panel
 from panels.security_panel import security_panel
+from panels.liveuamap_panel import liveuamap_panel  # THÊM IMPORT CHO LIVEUAMAP
 import threading
 
 app = Flask(__name__)
@@ -58,6 +59,20 @@ def run_security_crawl():
         except:
             pass
 
+# THÊM HÀM CRAWL CHO LIVEUAMAP
+def run_liveuamap_crawl():
+    """Chạy crawl Liveuamap events"""
+    print("🗺️ Running Liveuamap crawl...")
+    script_path = os.path.join(os.path.dirname(__file__), 'crawlers', 'liveuamap_crawler.py')
+    if os.path.exists(script_path):
+        result = subprocess.run(['python', script_path], capture_output=True, text=True)
+        if result.returncode == 0:
+            print("✅ Liveuamap crawl completed")
+        else:
+            print(f"❌ Liveuamap crawl failed: {result.stderr}")
+    else:
+        print("⚠️ liveuamap_crawler.py not found")
+
 # ============ API ENDPOINTS CŨ ============
 
 @app.route('/api/events', methods=['GET'])
@@ -103,10 +118,22 @@ def get_security():
             if 'data' in data:
                 return jsonify(data['data'])
             return jsonify(data)
-        return jsonify({'advisories': [], 'totalCount': 0})
+        return jsonify({'advisories':[], 'totalCount': 0})
     except Exception as e:
         print(f"Error reading security data: {e}")
-        return jsonify({'advisories': [], 'totalCount': 0})
+        return jsonify({'advisories':[], 'totalCount': 0})
+
+# THÊM API ENDPOINT CHO LIVEUAMAP
+@app.route('/api/liveuamap', methods=['GET'])
+def get_liveuamap():
+    """Lấy dữ liệu sự kiện từ Liveuamap"""
+    try:
+        # Sử dụng panel để format dữ liệu cho sạch sẽ
+        data = liveuamap_panel.load_events()
+        return jsonify(data)
+    except Exception as e:
+        print(f"Error reading liveuamap data: {e}")
+        return jsonify({'events':[], 'totalCount': 0})
 
 # ============ REFRESH API ============
 
@@ -130,6 +157,14 @@ def refresh_security():
     thread = threading.Thread(target=run_security_crawl)
     thread.start()
     return jsonify({'message': 'Security crawl started'})
+
+# THÊM REFRESH API CHO LIVEUAMAP
+@app.route('/api/refresh/liveuamap', methods=['POST'])
+def refresh_liveuamap():
+    """Kích hoạt crawl Liveuamap thủ công"""
+    thread = threading.Thread(target=run_liveuamap_crawl)
+    thread.start()
+    return jsonify({'message': 'Liveuamap crawl started'})
 
 # ============ API CHO WEBCAM ============
 
@@ -171,7 +206,8 @@ def health_check():
         'services': {
             'acled': os.path.exists(os.path.join(os.path.dirname(__file__), 'data', 'iran_protests_clean.json')),
             'oil': os.path.exists(os.path.join(os.path.dirname(__file__), 'data', 'oil_prices.json')),
-            'security': os.path.exists(os.path.join(os.path.dirname(__file__), 'data', 'security_advisories.json'))
+            'security': os.path.exists(os.path.join(os.path.dirname(__file__), 'data', 'security_advisories.json')),
+            'liveuamap': os.path.exists(os.path.join(os.path.dirname(__file__), 'data', 'iran-events-latest.json')) # THÊM HEALTH CHECK LIVEUAMAP
         }
     })
 
@@ -184,9 +220,10 @@ scheduler.start()
 
 # Chạy các crawl lần đầu khi khởi động
 print("🔄 Running initial crawls...")
-run_acled_crawl()
+# run_acled_crawl()
 run_oil_crawl()
 run_security_crawl()
+run_liveuamap_crawl()  # THÊM RUN LẦN ĐẦU CHO LIVEUAMAP
 
 # ============ MAIN ============
 
@@ -198,9 +235,11 @@ if __name__ == '__main__':
     print(f"   - GET  /api/events     (ACLED events)")
     print(f"   - GET  /api/oil        (Oil prices)")
     print(f"   - GET  /api/security   (Security advisories)")
+    print(f"   - GET  /api/liveuamap  (Liveuamap events)") # THÊM LOG CHỈ DẪN
     print(f"   - POST /api/refresh/acled")
     print(f"   - POST /api/refresh/oil")
     print(f"   - POST /api/refresh/security")
+    print(f"   - POST /api/refresh/liveuamap")             # THÊM LOG CHỈ DẪN
     print(f"   - GET  /api/health     (Health check)")
     print("=" * 50)
     app.run(host='0.0.0.0', port=3000, debug=True)
