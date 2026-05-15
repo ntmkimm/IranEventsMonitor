@@ -2763,6 +2763,15 @@
         "notes": "On 12 May 2025, retirees of the telecommunication company of Iran protested in front of the provincial telecommunication company's central office in Isfahan city (Isfahan, Isfahan) over their ongoing dispute with the company regarding insurance premium rates and to demand payment of pension arrears."
     },
     {
+        "id": "IRN31228",
+        "date": "2025-05-14",
+        "type": "Protests",
+        "location": "Kashan",
+        "lat": 33.9973,
+        "lng": 51.4416,
+        "notes": "On 14 May 2025, truck drivers rallied in Kashan city (Kashan, Isfahan) to protest against the distribution method of diesel in the city."
+    },
+    {
         "id": "IRN31229",
         "date": "2025-05-11",
         "type": "Protests",
@@ -2772,6 +2781,15 @@
         "notes": "On 11 May 2025, local villagers and supporters rallied and staged a human chain near Alavijeh city (Najafabad, Isfahan) to protest against mining activities and their detrimental environmental effects."
     },
     {
+        "id": "IRN31230",
+        "date": "2025-05-15",
+        "type": "Protests",
+        "location": "Shahin Shahr",
+        "lat": 32.8579,
+        "lng": 51.5529,
+        "notes": "On 15 May 2025, local bakers staged a rally outside the county governor's office in Shahin Shahr city (Shahinshahro Meymeh, Isfahan) over the poor living conditions, rising production costs, and frequent power outages."
+    },
+    {
         "id": "IRN31231",
         "date": "2025-05-10",
         "type": "Protests",
@@ -2779,6 +2797,15 @@
         "lat": 27.5236,
         "lng": 57.8811,
         "notes": "On 10 May 2025, local bakers staged a rally outside the county governor's office in Qaleh Ganj city (Ghaleye-Ganj, Kerman) over the poor living conditions, rising production costs, and frequent power outages."
+    },
+    {
+        "id": "IRN31232",
+        "date": "2025-05-14",
+        "type": "Protests",
+        "location": "Rafsanjan",
+        "lat": 30.4067,
+        "lng": 55.9939,
+        "notes": "On 14 May 2025, local bakers staged a rally outside the county governor's office in Rafsanjan city (Rafsanjan, Kerman) over the poor living conditions, rising production costs, and frequent power outages."
     },
     {
         "id": "IRN31233",
@@ -2797,6 +2824,15 @@
         "lat": 34.3142,
         "lng": 47.065,
         "notes": "On 12 May 2025, retirees of the telecommunication company staged a protest in front of the provincial telecommunication company's central office in Kermanshah city (Kermanshah, Kermanshah) over their ongoing dispute with the company regarding insurance premium rates and to demand payment of pension arrears."
+    },
+    {
+        "id": "IRN31235",
+        "date": "2025-05-14",
+        "type": "Protests",
+        "location": "Kermanshah",
+        "lat": 34.3142,
+        "lng": 47.065,
+        "notes": "On 14 May 2025, students at Kermanshah University of Medical Sciences rallied in front of the dining hall in Kermanshah city (Kermanshah, Kermanshah) over the poor food quality."
     },
     {
         "id": "IRN31236",
@@ -2869,6 +2905,15 @@
         "lat": 30.3586,
         "lng": 50.7981,
         "notes": "On 13 May 2025, young job seekers staged a rally outside the Gachsaran Petrochemical Company in Dogonbadan city (Gachsaran, Kohgiluyeh and Boyer-Ahmad) to demand the hiring of local job seekers."
+    },
+    {
+        "id": "IRN31245",
+        "date": "2025-05-14",
+        "type": "Protests",
+        "location": "Dogonbadan",
+        "lat": 30.3586,
+        "lng": 50.7981,
+        "notes": "On 14 May 2025, young job seekers staged a rally outside the Gachsaran Petrochemical Company for the second day in a row in Dogonbadan city (Gachsaran, Kohgiluyeh and Boyer-Ahmad) to demand the hiring of local job seekers."
     },
     {
         "id": "IRN31246",
@@ -2961,6 +3006,24 @@
         "notes": "On 13 May 2025, local bakers staged a rally outside the county governor's office in Babolsar city (Babolsar, Mazandaran) over the poor living conditions, rising production costs, and frequent power outages."
     },
     {
+        "id": "IRN31256",
+        "date": "2025-05-14",
+        "type": "Protests",
+        "location": "Bojnurd",
+        "lat": 37.4747,
+        "lng": 57.329,
+        "notes": "On 14 May 2025, local bakers staged a rally outside the provincial governor's office in Bojnurd city (Bojnurd, North Khorasan) over the poor living conditions, rising production costs, and frequent power outages."
+    },
+    {
+        "id": "IRN31258",
+        "date": "2025-05-14",
+        "type": "Protests",
+        "location": "Qazvin",
+        "lat": 36.2688,
+        "lng": 50.0041,
+        "notes": "On 14 May 2025, workers who are applicants of the National Housing project held a protest outside the Housing Foundation of Islamic Revolution in Qazvin city (Qazvin, Qazvin) to demand an end to the uncertainty of their contracts."
+    },
+    {
         "id": "IRN31259",
         "date": "2025-05-13",
         "type": "Protests",
@@ -2988,6 +3051,15 @@
         "notes": "On 13 May 2025, families of prisoners sentenced to death and local residents staged a rally outside the Evin Prison in Tehran - District 1 (Tehran, Tehran) to demand execution sentences be revoked."
     },
     {
+        "id": "IRN31264",
+        "date": "2025-05-15",
+        "type": "Protests",
+        "location": "Tehran - District 1",
+        "lat": 35.807,
+        "lng": 51.4607,
+        "notes": "On 15 May 2025, students at the Shahid Beheshti University rallied in front of the dining hall in Tehran - District 1 (Tehran, Tehran) over the poor food quality."
+    },
+    {
         "id": "IRN31265",
         "date": "2025-05-12",
         "type": "Protests",
@@ -3004,6 +3076,24 @@
         "lat": 35.7512,
         "lng": 51.3616,
         "notes": "On 11 May 2025, retirees of the Social Security Organization protested in front of the Social Security Organization in Tehran - District 2 (Tehran, Tehran) over the lack of salary equalization and poor living conditions."
+    },
+    {
+        "id": "IRN31267",
+        "date": "2025-05-15",
+        "type": "Protests",
+        "location": "Tehran - District 2",
+        "lat": 35.7512,
+        "lng": 51.3616,
+        "notes": "On 15 May 2025, local residents at the Abshar town rallied outside the Ministry of Cooperatives, Labour, and Social Welfare in Tehran - District 2 (Tehran, Tehran) over the destruction of green space and illegal construction by a cooperative company."
+    },
+    {
+        "id": "IRN31268",
+        "date": "2025-05-14",
+        "type": "Protests",
+        "location": "Tehran - District 22",
+        "lat": 35.7415,
+        "lng": 51.2055,
+        "notes": "On 14 May 2025, applicants of the Hakim Housing project held a protest outside the project site in Tehran - District 22 (Tehran, Tehran) to demand an end to the uncertainty of their contracts."
     },
     {
         "id": "IRN31269",
@@ -3040,6 +3130,15 @@
         "lat": 31.8972,
         "lng": 54.3675,
         "notes": "On 11 May 2025, workers of the Yazd Textile Company staged a rally in front of the provincial governor's office in Yazd city (Yazd, Yazd) over the frequent power outages."
+    },
+    {
+        "id": "IRN31274",
+        "date": "2025-05-14",
+        "type": "Protests",
+        "location": "Yazd",
+        "lat": 31.8972,
+        "lng": 54.3675,
+        "notes": "On 14 May 2025, local bakers staged a rally outside the provincial governor's office in Yazd city (Yazd, Yazd) over the poor living conditions, rising production costs, and frequent power outages."
     },
     {
         "id": "IRN31276",

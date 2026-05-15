@@ -655,16 +655,161 @@ function setupNewRefreshButtons() {
             }
         };
     });
+
+    const btnInsight = document.getElementById('btn-refresh-insight');
+    if (btnInsight) {
+        btnInsight.onclick = async () => {
+            btnInsight.innerText = '⏳ AI ĐANG NGHĨ...';
+            btnInsight.disabled = true;
+            document.getElementById('insight-content').innerHTML = `
+                <div style="text-align:center; padding: 20px; color:#ffaa00;">
+                    <i class="fas fa-brain" style="font-size:24px; margin-bottom:10px;"></i><br>
+                    AI đang thu thập dữ liệu và phân tích cục diện...<br>
+                    (Vui lòng đợi khoảng 30 - 60 giây)
+                </div>`;
+            
+            try {
+                // Gọi API kích hoạt crawler AI
+                await fetch(`${API_BASE}/refresh/insight`, { method: 'POST' });
+                
+                // Đợi 45 giây để LLM tạo xong chữ rồi mới gọi hàm load lại
+                setTimeout(async () => {
+                    await loadInsight();
+                    btnInsight.innerText = '✅ OK';
+                    setTimeout(() => { 
+                        btnInsight.innerText = '🔄 SYNC'; 
+                        btnInsight.disabled = false; 
+                    }, 3000);
+                }, 45000); // 45000ms = 45 giây
+                
+            } catch (e) {
+                btnInsight.innerText = '❌ LỖI';
+                btnInsight.disabled = false;
+            }
+        };
+    }
 }
 
+// TẢI VÀ RENDER AI INSIGHT
+async function loadInsight() {
+    try {
+        const res = await fetch(`${API_BASE}/insight`);
+        const data = await res.json();
+        const container = document.getElementById('insight-content');
+        
+        if (data.content && data.content !== "No insight generated yet.") {
+            // Dùng thư viện marked.js để render văn bản AI ra HTML xịn xò
+            container.innerHTML = marked.parse(data.content);
+        } else {
+            container.innerHTML = '<div class="placeholder" style="color:#aaa;">Chưa có dữ liệu phân tích. Hãy bấm SYNC.</div>';
+        }
+    } catch (e) { 
+        console.error("Insight error:", e); 
+        document.getElementById('insight-content').innerHTML = '<div class="placeholder" style="color:red;">Lỗi tải AI Insight.</div>';
+    }
+}
+
+function setupInsightButton() {
+    const btnInsight = document.getElementById('btn-refresh-insight');
+    if (!btnInsight) return; // Nếu không tìm thấy nút thì bỏ qua để không báo lỗi
+
+    btnInsight.onclick = async () => {
+        btnInsight.innerText = '⏳ THINKING ...';
+        btnInsight.disabled = true;
+        
+        // Hiển thị trạng thái chờ trong khung Insight
+        document.getElementById('insight-content').innerHTML = `
+            <div style="text-align:center; padding: 20px; color:#ffaa00;">
+                <i class="fas fa-brain" style="font-size:24px; margin-bottom:10px;"></i><br>
+                AI đang thu thập dữ liệu và phân tích cục diện...<br>
+                (Vui lòng đợi khoảng 45 - 60 giây)
+            </div>`;
+        
+        try {
+            // 1. Gọi API Backend kích hoạt Python chạy LLM
+            await fetch(`${API_BASE}/refresh/insight`, { method: 'POST' });
+            
+            // 2. Đợi 45 giây để LLM làm thơ/phân tích xong
+            setTimeout(async () => {
+                // 3. Đọc lại file intelligence_insight.json và hiển thị lên màn hình
+                await loadInsight();
+                
+                btnInsight.innerText = '✅ OK';
+                setTimeout(() => { 
+                    btnInsight.innerText = '🔄 GET INSIGHT'; 
+                    btnInsight.disabled = false; 
+                }, 3000);
+            }, 45000); // 45000ms = 45 giây
+            
+        } catch (e) {
+            btnInsight.innerText = '❌ LỖI';
+            btnInsight.disabled = false;
+        }
+    };
+}
+
+function setupSyncAllButton() {
+    const btnSyncAll = document.getElementById('btn-sync-all');
+    if (!btnSyncAll) return;
+
+    btnSyncAll.onclick = async () => {
+        const originalText = btnSyncAll.innerText;
+        btnSyncAll.innerText = '⏳ TRIGGERING CRAWLERS...';
+        btnSyncAll.disabled = true;
+
+        // Danh sách các API cần kích hoạt đồng thời
+        const endpoints = [
+            '/refresh/acled',
+            '/refresh/liveuamap',
+            '/refresh/telegram',
+            '/refresh/polymarket',
+            '/refresh/opensky',
+            '/refresh/gdelt',
+            '/refresh/oil',
+            '/refresh/security'
+        ];
+
+        try {
+            // Kích hoạt tất cả crawler chạy ngầm
+            await Promise.all(endpoints.map(ep => 
+                fetch(`${API_BASE}${ep}`, { method: 'POST' }).catch(err => console.error(`Lỗi: ${ep}`, err))
+            ));
+
+            btnSyncAll.innerText = '📡 FETCHING DATA...';
+            
+            // Chờ khoảng 6-8 giây để Backend cào xong và lưu file, sau đó load lại giao diện
+            setTimeout(async () => {
+                // Gọi lại các hàm load dữ liệu lên giao diện
+                await initDashboard(); 
+                fetchOilData();
+                await loadSecurityAdvisories();
+                await loadLiveuamap();
+                await loadTelegram();
+                await loadPolymarket();
+                await loadOpenSky();
+                await loadGdelt();
+
+                btnSyncAll.innerText = '✅ SYSTEM UPDATED';
+                setTimeout(() => {
+                    btnSyncAll.innerText = originalText;
+                    btnSyncAll.disabled = false;
+                }, 3000);
+            }, 100000); // 100000ms = 100 giây
+
+        } catch (error) {
+            btnSyncAll.innerText = '❌ SYNC FAILED';
+            btnSyncAll.disabled = false;
+        }
+    };
+}
 
 // Khởi tạo tất cả
 async function init() {
     // Init existing dashboard
     await initDashboard();
     fetchOilData();
-    setupAllRefreshButtons(); // Thay thế setupRefreshButtons cũ
-    setupNewRefreshButtons();
+    setupSyncAllButton();
+    setupInsightButton()
     
     // Init new features
     renderWebcams();
@@ -676,7 +821,8 @@ async function init() {
     await loadTelegram();
     await loadPolymarket();
     await loadGdelt();
-    
+    await loadInsight();
+
     // Auto refresh security every 5 minutes
     setInterval(loadSecurityAdvisories, 300000);
     setInterval(loadOpenSky, 120000);

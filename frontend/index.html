@@ -9,6 +9,7 @@
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
     <header class="top-bar">
@@ -19,7 +20,8 @@
         </div>
         
         <div class="map-controls">
-            <button id="btn-refresh-liveuamap" style="color: #ffaa00; border-color: #ffaa00;">🗺️ SYNC LIVEUA</button>
+            <button id="btn-sync-all" class="sync-all-btn">🔄 UPDATE ALL INTEL</button>
+            <!-- <button id="btn-refresh-liveuamap" style="color: #ffaa00; border-color: #ffaa00;">🗺️ SYNC LIVEUA</button>
             <button id="btn-refresh-telegram" style="color: #0088cc; border-color: #0088cc;">📢 SYNC TELEGRAM</button>
             <button id="btn-refresh-polymarket" style="color: #8b5cf6; border-color: #8b5cf6;">📊 SYNC POLY</button>
 
@@ -28,7 +30,7 @@
             
             <button id="btn-refresh-acled" style="color: #ffaa00; border-color: #ffaa00;">⚠️ SYNC EVENTS</button>
             <button id="btn-refresh-oil" style="color: #00ffff; border-color: #00ffff;">🛢️ SYNC OIL</button>
-            <button id="btn-refresh-security" style="color: #00ffaa; border-color: #00ffaa;">🛡️ SYNC SECURITY</button>
+            <button id="btn-refresh-security" style="color: #00ffaa; border-color: #00ffaa;">🛡️ SYNC SECURITY</button> -->
         </div>
     </header>
 
@@ -36,6 +38,17 @@
         <section id="map-container">
             <div id="map-2d" style="display: block; width: 100%; height: 100%;"></div>
         </section>
+        
+        <!-- THÊM PANEL AI INSIGHT-->
+        <div id="ai-insight-panel" class="fixed-right-panel">
+            <div class="panel-header" style="border-bottom: 1px solid #58a6ff;">
+                <div class="panel-title" style="color: #58a6ff;">🤖 AI STRATEGIC INSIGHT</div>
+                <button id="btn-refresh-insight" class="sync-btn-small">🎯 GET INSIGHT</button>
+            </div>
+            <div class="panel-content" id="insight-content">
+                <div class="placeholder">Đang tải phân tích AI...</div>
+            </div>
+        </div>
         
         <!-- THÊM PANEL WEBCAM & SECURITY -->
         <section id="dashboard-panels">
