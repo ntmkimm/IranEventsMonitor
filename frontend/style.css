@@ -65,7 +65,7 @@ body, html {
     background-color: #050505;
 }
 
-#map-2d, #globe-viz {
+#map-2d {
     position: absolute !important;
     top: 0;
     left: 0;

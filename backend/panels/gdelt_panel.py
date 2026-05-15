@@ -70,15 +70,25 @@ class GdeltPanel(DataPanel):
             return "Unknown"
     
     def get_articles_for_display(self):
-        """Lấy danh sách bài báo đã format cho hiển thị"""
-        data = self.load_gdelt()
-        articles = data.get('articles', [])
-        
-        # Format lại thời gian cho mỗi bài báo
-        for art in articles:
-            art['time_ago'] = self.format_time_ago(art.get('date', ''))
-        
-        return articles
+            """Lấy danh sách bài báo và chuẩn hóa các trường cho Frontend"""
+            data = self.load_gdelt()
+            articles = data.get('articles', [])
+            
+            for art in articles:
+                # 1. Tính time_ago (Backend xử lý cho chuẩn)
+                art['time_ago'] = self.format_time_ago(art.get('date', ''))
+                
+                # 2. Sửa lỗi tóm tắt bị null
+                # Nếu summary_snippet null, ta lấy tạm Title hoặc thông báo khác
+                if not art.get('summary_snippet'):
+                    art['summary_snippet'] = "Bản tin cập nhật về tình hình chiến lược tại khu vực."
+                
+                # 3. Giả lập ai_analysis nếu chưa có (để Frontend ưu tiên hiển thị)
+                if not art.get('ai_analysis'):
+                    themes_str = ", ".join(art.get('themes', []))
+                    art['ai_analysis'] = f"Phân tích hệ thống: Tin tức liên quan đến {themes_str}."
+
+            return articles
     
     def get_articles_by_theme(self, theme):
         """Lọc bài báo theo theme (VD: 'Conflict', 'Energy')"""

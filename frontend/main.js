@@ -3,10 +3,8 @@
 const API_URL = 'http://localhost:3000/api/events';
 const REFRESH_URL = 'http://localhost:3000/api/refresh';
 
-let myGlobe;
 let myMap2D;
 let globalEventData = [];
-let currentMode = '2D'; 
 
 function groupEventsByLocation(data) {
     const grouped = {};
@@ -45,13 +43,6 @@ async function initDashboard() {
         } else {
             renderMap2D(globalEventData); 
         }
-
-        if (myGlobe) {
-            myGlobe.hexBinPointsData(globalEventData);
-        } else {
-            renderGlobe(globalEventData);
-        }
-        
     } catch (error) {
         console.error("LỖI LOGIC TẢI BẢN ĐỒ:", error);
     }
@@ -108,81 +99,6 @@ function drawMarkers2D(eventData) {
         marker.bindPopup(popupHTML);
     });
 }
-
-function renderGlobe(eventData) {
-    const container = document.getElementById('map-container');
-    myGlobe = Globe()
-        (document.getElementById('globe-viz'))
-        .width(container.clientWidth)
-        .height(container.clientHeight)
-        .globeImageUrl('//unpkg.com/three-globe/example/img/earth-dark.jpg')
-        .backgroundImageUrl('//unpkg.com/three-globe/example/img/night-sky.png')
-        .hexBinPointLat(d => parseFloat(d.lat))
-        .hexBinPointLng(d => parseFloat(d.lng))
-        .hexBinPointWeight(1)
-        .hexAltitude(d => d.sumWeight * 0.05)
-        .hexTopColor(() => '#ff4444')
-        .hexSideColor(() => 'rgba(255, 68, 68, 0.2)')
-        .hexBinMerge(true)
-        .hexBinPointsData(eventData)
-        .hexLabel(hex => {
-            const count = hex.points.length;
-            const latestEvent = hex.points.sort((a, b) => new Date(b.date) - new Date(a.date))[0];
-            
-            return `
-                <div style="background: rgba(15, 15, 15, 0.95); padding: 12px; border-radius: 6px; border: 1px solid #ff4444; color: white; min-width: 250px;">
-                    <h4 style="margin: 0 0 5px 0; color: #ffaa00;">🔥 ${count} sự kiện tại khu vực này</h4>
-                    <p style="margin: 0; font-size: 12px; color: #aaa;">📅 Gần nhất: ${latestEvent.date}</p>
-                    <hr style="border-color: #333; margin: 8px 0;">
-                    <p style="margin: 0; font-size: 13px; max-width: 300px; white-space: normal; line-height: 1.4;">${latestEvent.notes}</p>
-                </div>
-            `;
-        })
-        .onHexClick((hex, event, coords) => {
-            myGlobe.pointOfView({ lat: coords.lat, lng: coords.lng, altitude: 0.6 }, 1000);
-        });
-
-    myGlobe.pointOfView({ lat: 32.42, lng: 53.68, altitude: 1.5 }, 2000);
-    myGlobe.controls().autoRotate = true;
-    myGlobe.controls().autoRotateSpeed = 0.5;
-}
-
-function setupToggleButtons() {
-    const btn3D = document.getElementById('btn-3d');
-    const btn2D = document.getElementById('btn-2d');
-    const div3D = document.getElementById('globe-viz');
-    const div2D = document.getElementById('map-2d');
-
-    btn2D.addEventListener('click', () => {
-        currentMode = '2D';
-        btn2D.classList.add('active');
-        btn3D.classList.remove('active');
-        div3D.style.display = 'none';
-        div2D.style.display = 'block';
-
-        setTimeout(() => { myMap2D.invalidateSize(); }, 100);
-    });
-
-    btn3D.addEventListener('click', () => {
-        currentMode = '3D';
-        btn3D.classList.add('active');
-        btn2D.classList.remove('active');
-        div2D.style.display = 'none';
-        div3D.style.display = 'block';
-
-        const container = document.getElementById('map-container');
-        myGlobe.width(container.clientWidth);
-        myGlobe.height(container.clientHeight);
-    });
-}
-
-window.addEventListener('resize', () => {
-    const container = document.getElementById('map-container');
-    if(myGlobe) {
-        myGlobe.width(container.clientWidth);
-        myGlobe.height(container.clientHeight);
-    }
-});
 
 async function fetchOilData() {
     try {
@@ -672,6 +588,37 @@ async function loadOpenSky() {
     }
 }
 
+// 4. TẢI VÀ RENDER GDELT NEWS
+async function loadGdelt() {
+    try {
+        const res = await fetch(`${API_BASE}/gdelt`); // Endpoint này khớp với GdeltPanel ở backend
+        const data = await res.json();
+        const articles = data.articles || [];
+        const container = document.getElementById('gdelt-content');
+        
+        if (articles.length === 0) {
+            container.innerHTML = '<div class="placeholder">No recent news found.</div>';
+            return;
+        }
+
+        container.innerHTML = articles.slice(0, 15).map(art => `
+            <div class="sec-item" style="border-left: 2px solid #58a6ff; background: rgba(88, 166, 255, 0.05); margin-bottom: 8px;">
+                <div class="sec-item-header">
+                    <span class="sec-source">📰 ${art.source || 'GDELT'}</span>
+                    <span class="sec-time">${art.time_ago || 'Recently'}</span>
+                </div>
+                <a href="${art.url}" target="_blank" class="sec-title" style="color: #58a6ff;">${art.title}</a>
+                <div style="display: flex; gap: 5px; margin-top: 5px;">
+                    ${(art.themes || []).slice(0, 3).map(t => `<span style="font-size: 9px; background: #222; padding: 2px 5px; border-radius: 3px; color: #888;">#${t}</span>`).join('')}
+                </div>
+            </div>
+        `).join('');
+    } catch (e) { 
+        console.error("GDELT error:", e); 
+        document.getElementById('gdelt-content').innerHTML = '<div class="placeholder">Error loading GDELT.</div>';
+    }
+}
+
 // 2. CẬP NHẬT HÀM setupNewRefreshButtons (Thêm OpenSky vào danh sách cấu hình)
 // Tìm hàm setupNewRefreshButtons hiện tại và thêm vào mảng configs:
 function setupNewRefreshButtons() {
@@ -679,7 +626,8 @@ function setupNewRefreshButtons() {
         { id: 'btn-refresh-liveuamap', url: '/refresh/liveuamap', callback: loadLiveuamap },
         { id: 'btn-refresh-telegram', url: '/refresh/telegram', callback: loadTelegram },
         { id: 'btn-refresh-polymarket', url: '/refresh/polymarket', callback: loadPolymarket },
-        { id: 'btn-refresh-opensky', url: '/refresh/opensky', callback: loadOpenSky } // MỚI
+        { id: 'btn-refresh-opensky', url: '/refresh/opensky', callback: loadOpenSky }, // MỚI
+        { id: 'btn-refresh-gdelt', url: '/refresh/gdelt', callback: loadGdelt } 
     ];
 
     configs.forEach(cfg => {
@@ -715,8 +663,8 @@ async function init() {
     // Init existing dashboard
     await initDashboard();
     fetchOilData();
-    setupToggleButtons();
     setupAllRefreshButtons(); // Thay thế setupRefreshButtons cũ
+    setupNewRefreshButtons();
     
     // Init new features
     renderWebcams();
@@ -727,6 +675,7 @@ async function init() {
     await loadLiveuamap();
     await loadTelegram();
     await loadPolymarket();
+    await loadGdelt();
     
     // Auto refresh security every 5 minutes
     setInterval(loadSecurityAdvisories, 300000);

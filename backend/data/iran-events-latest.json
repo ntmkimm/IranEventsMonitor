@@ -1,8 +1,78 @@
 [
   {
+    "id": "22842358",
+    "title": "Araghchi: The United States cannot achieve its goals through military action, and the situation would be different if diplomacy were pursued.",
+    "time": "3 hours ago",
+    "source": "https://x.com/AJABreaking/status/2055206338762797503",
+    "coordinates": {
+      "lat": 35.68853320738875,
+      "lon": 51.416015625
+    }
+  },
+  {
+    "id": "22842359",
+    "title": "Iranian Foreign Minister: The United States has tested us twice and realized that there are no military solutions to the issues concerning us.",
+    "time": "3 hours ago",
+    "source": "https://x.com/AJABreaking/status/2055205960449155325",
+    "coordinates": {
+      "lat": 35.68853320738875,
+      "lon": 51.416015625
+    }
+  },
+  {
+    "id": "22842341",
+    "title": "Reuters, citing security sources: A drone targeted a headquarters of the Iranian opposition north of Erbil in Iraqi Kurdistan.",
+    "time": "4 hours ago",
+    "source": "https://x.com/SkyNewsArabia_B/status/2055195766424293587",
+    "coordinates": {
+      "lat": 36.86204269508728,
+      "lon": 44.57153320312501
+    }
+  },
+  {
+    "id": "22842352",
+    "title": "Lavrov: To address the crisis regarding Iran, it is necessary to understand the root cause of the crisis, namely the unjustified American-Israeli aggression.",
+    "time": "4 hours ago",
+    "source": "https://x.com/AJABreaking/status/2055189722712920466",
+    "coordinates": {
+      "lat": 28.6118,
+      "lon": 77.1999
+    }
+  },
+  {
+    "id": "22842350",
+    "title": "Lavrov: Western intervention, whether military or through regime change, further complicates the situation in the Middle East and North Africa.",
+    "time": "4 hours ago",
+    "source": "https://x.com/AJABreaking/status/2055189092942413886",
+    "coordinates": {
+      "lat": 28.6118,
+      "lon": 77.1999
+    }
+  },
+  {
+    "id": "22842348",
+    "title": "The UAE is accelerating plans to double its crude export capacity from Fujairah, increasing it to around 3-3.5mn barrels in 24 hours. The UAE’s West-East Pipeline project is expected to become operational in 2027",
+    "time": "5 hours ago",
+    "source": "https://x.com/Bacharelhalabi/status/2055189258562928803",
+    "coordinates": {
+      "lat": 25.1689,
+      "lon": 56.35763
+    }
+  },
+  {
+    "id": "22842354",
+    "title": "China's Foreign Ministry announced regarding Iran: \"Now that the dialogue has been opened, it should not be closed again, and solutions must be found through negotiations that take into account the concerns of all parties involved on issues such as Iran's nuclear program.\"",
+    "time": "6 hours ago",
+    "source": "https://x.com/IranIntlbrk/status/2055171103488618635",
+    "coordinates": {
+      "lat": 39.92343,
+      "lon": 116.43551
+    }
+  },
+  {
     "id": "22842226",
     "title": "The FBI said on Thursday it was offering a $200,000 reward for information leading to the arrest and prosecution of Monica Witt, a former US counterintelligence agent charged with espionage for Iran",
-    "time": "11 hours ago",
+    "time": "18 hours ago",
     "source": "https://x.com/IranIntl_En/status/2054980298857730235/photo/1",
     "coordinates": {
       "lat": 38.89397,
@@ -12,7 +82,7 @@
   {
     "id": "22842203",
     "title": "Earthquake of magnitude 4.7 - 28 km NNW of Bardsīr, Iran",
-    "time": "20 hours ago",
+    "time": "a day ago",
     "source": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000sxm9",
     "coordinates": {
       "lat": 30.176,
@@ -22,7 +92,7 @@
   {
     "id": "22842202",
     "title": "British maritime authority: Ship seized near the Strait of Hormuz and taken to Iranian waters",
-    "time": "21 hours ago",
+    "time": "a day ago",
     "source": "https://x.com/SkyNewsArabia_B/status/2054823072189079832",
     "coordinates": {
       "lat": 25.84439325019514,
@@ -32,7 +102,7 @@
   {
     "id": "22842188",
     "title": "UK Maritime Trade Operations: We received a report of an incident 38 nautical miles northeast of Fujairah",
-    "time": "21 hours ago",
+    "time": "a day ago",
     "source": "https://x.com/AJABreaking/status/2054820908456443956",
     "coordinates": {
       "lat": 25.69103802005013,
@@ -42,7 +112,7 @@
   {
     "id": "22842186",
     "title": "Araghchi: The Strait of Hormuz is open to all commercial vessels from our perspective, but they must cooperate with our naval forces.",
-    "time": "21 hours ago",
+    "time": "a day ago",
     "source": "https://x.com/LBCI_NEWS/status/2054819450830926033",
     "coordinates": {
       "lat": 35.68827,
@@ -72,7 +142,7 @@
   {
     "id": "22842123",
     "title": "The UAE denies that Netanyahu secretly visited the country during the war with Iran, which was stated by the Israeli Prime Minister's Office",
-    "time": "a day ago",
+    "time": "2 days ago",
     "source": "https://twitter.com/ariel_oseran/status/2054668754517192838",
     "coordinates": {
       "lat": 24.42691,
@@ -82,7 +152,7 @@
   {
     "id": "22842103",
     "title": "Reuters, citing security sources: A drone strike targeted an Iranian opposition camp north of Erbil in Iraq.",
-    "time": "a day ago",
+    "time": "2 days ago",
     "source": "https://twitter.com/lbci_news/status/2054649162541519031",
     "coordinates": {
       "lat": 36.88292,
@@ -92,7 +162,7 @@
   {
     "id": "22842053",
     "title": "The Prime Minister's Office confirms that, in the midst of Operation Roaring Lion, Benjamin Netanyahu made a secret trip to the UAE, where he met with President Mohammed bin Zayed Al Nahyan. The covert visit reportedly led to a historic breakthrough in Israel–UAE relations",
-    "time": "a day ago",
+    "time": "2 days ago",
     "source": "https://twitter.com/amitsegal/status/2054608160942399794",
     "coordinates": {
       "lat": 31.77966,
@@ -122,7 +192,7 @@
   {
     "id": "22841858",
     "title": "Fars News Agency, quoting a source: Tehran believes that without the implementation of its five conditions, there will be no possibility of entering into new negotiations.",
-    "time": "2 days ago",
+    "time": "3 days ago",
     "source": "https://x.com/AJABreaking/status/2054266726544519266",
     "coordinates": {
       "lat": 35.68842,
@@ -182,7 +252,7 @@
   {
     "id": "22841747",
     "title": "Pakistan \"quietly allowed Iranian military aircraft to park in its country, potentially shielding them from US airstrikes\" - @CBSNews",
-    "time": "3 days ago",
+    "time": "4 days ago",
     "source": "https://x.com/vvanwilgenburg/status/2053923908286369822",
     "coordinates": {
       "lat": 33.55970664841198,
@@ -192,7 +262,7 @@
   {
     "id": "22841734",
     "title": "The U.S. Treasury Department has imposed new sanctions related to the Islamic Republic",
-    "time": "3 days ago",
+    "time": "4 days ago",
     "source": "https://x.com/IranIntlbrk/status/2053915512141226121",
     "coordinates": {
       "lat": 38.89737,
@@ -202,7 +272,7 @@
   {
     "id": "22841742",
     "title": "US President Donald Trump says he is “very disappointed in the Kurds” as he accuses Kurdish groups of failing to provide weapons to Iranian protesters",
-    "time": "3 days ago",
+    "time": "4 days ago",
     "source": "https://x.com/AlArabiya_Eng/status/2053913770594836932",
     "coordinates": {
       "lat": 38.89737,
@@ -227,76 +297,6 @@
     "coordinates": {
       "lat": 27.86176,
       "lon": -82.49127
-    }
-  },
-  {
-    "id": "22841686",
-    "title": "Saudi Aramco CEO Amin Nasser says if the Strait of Hormuz opens today, then it will still take months for the market to rebalance",
-    "time": "4 days ago",
-    "source": "https://x.com/FaytuksNetwork/status/2053814088463970602",
-    "coordinates": {
-      "lat": 24.68157,
-      "lon": 46.641
-    }
-  },
-  {
-    "id": "22841524",
-    "title": "Trump on Truth Social: Iran has been playing games with the United States, and the rest of the World, for 47 years (DELAY, DELAY, DELAY.), and then finally hit “pay dirt” when Barack Hussein Obama became President. He was not only good to them, he was great, actually going to their side, jettisoning Israel, and all other Allies, and giving Iran a major and very powerful new lease on life. Hundreds of Billions of Dollars, and 1.7 Billion Dollars in green cash, flown into Tehran, was handed to them on a silver platter. Every Bank in D.C., Virginia, and Maryland was emptied out — It was so much money that when it arrived, the Iranian Thugs had no idea what to do with it. They had never seen money like this, and never will again. It was taken off the plane in suitcases and satchels, and the Iranians couldn’t believe their luck. They finally found the greatest SUCKER of them all, in the form of a weak and stupid American President. He was a disaster as our “Leader,” but not as bad as Sleepy Joe Biden. For 47 years the Iranians have been “tapping” us along, keeping us waiting, killing our people with their roadside bombs, destroying protests, and recently wiping out 42,000, unarmed protestors, and laughing at our now GREAT AGAIN Country. They will be laughing no longer",
-    "time": "4 days ago",
-    "source": "https://x.com/BarakRavid/status/2053533868037419262",
-    "coordinates": {
-      "lat": 38.8987,
-      "lon": -77.037
-    }
-  },
-  {
-    "id": "22841523",
-    "title": "Iranian Parliament's National Security and Foreign Policy Committee Spokesperson Ebrahim Rezaei: The war is not over yet, and we have not witnessed a genuine ceasefire.",
-    "time": "4 days ago",
-    "source": "https://x.com/Lebanon24/status/2053533726454190451",
-    "coordinates": {
-      "lat": 35.7001,
-      "lon": 51.44915
-    }
-  },
-  {
-    "id": "22841386",
-    "title": "An Iranian Foreign Ministry official: Operation Freedom has achieved no success for Washington and its allies, and our armed forces control the Strait of Hormuz",
-    "time": "6 days ago",
-    "source": "https://x.com/AlarabyTV/status/2053076370943521079",
-    "coordinates": {
-      "lat": 35.69745580725804,
-      "lon": 51.38305664062501
-    }
-  },
-  {
-    "id": "22841389",
-    "title": "Russia is using the Caspian Sea to quietly move military and commercial supplies to Iran, helping Tehran bypass U.S. pressure and sanctions. Source: NYT",
-    "time": "6 days ago",
-    "source": "https://twitter.com/clashreport/status/2053069464581623943",
-    "coordinates": {
-      "lat": 37.965854128749434,
-      "lon": 49.84497070312501
-    }
-  },
-  {
-    "id": "22841278",
-    "title": "Governor of Lengeh port in southern Iran: 6 wounded and 6 missing after US forces targeted Iranian ships on Thursday",
-    "time": "6 days ago",
-    "source": "https://twitter.com/ajabreaking/status/2052918639959883978",
-    "coordinates": {
-      "lat": 26.55352,
-      "lon": 54.8774
-    }
-  },
-  {
-    "id": "22841273",
-    "title": "CENTCOM: U.S. forces disabled the Iranian-flagged tankers Sea Star III and Sevda on May 8 as they attempted to enter an Iranian port in violation of the U.S. blockade. A U.S. Navy F/A-18 Super Hornet from USS George H.W. Bush struck both vessels’ smokestacks with precision munitions, preventing them from reaching Iran",
-    "time": "7 days ago",
-    "source": "https://x.com/clashreport/status/2052757675365085550",
-    "coordinates": {
-      "lat": 25.859223554761407,
-      "lon": 57.05200195312501
     }
   }
 ]
