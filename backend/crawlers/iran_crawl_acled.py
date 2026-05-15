@@ -3,9 +3,14 @@ import json
 import os
 import sys
 
+from dotenv import load_dotenv
+
+# Load cấu hình từ file .env hiện tại
+load_dotenv()
+
 # --- CẤU HÌNH ---
-ACCESS_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjBlZWY4N2FmOTFmZDI4YmY1OGU4OGIzN2ZkZWFhNDU5OTE5ODI4MmRmZjFkMjhkNWY0NmJmOTM4MDQyZjQ1ZWFjNmY4MjI5NjRlZDFkZjQ3In0.eyJhdWQiOiJhY2xlZCIsImp0aSI6IjBlZWY4N2FmOTFmZDI4YmY1OGU4OGIzN2ZkZWFhNDU5OTE5ODI4MmRmZjFkMjhkNWY0NmJmOTM4MDQyZjQ1ZWFjNmY4MjI5NjRlZDFkZjQ3IiwiaWF0IjoxNzc4NTkxNzU0LCJuYmYiOjE3Nzg1OTE3NTQsImV4cCI6MTc3ODY3ODE1NC44NTM5MDYsInNjb3BlIjpbImF1dGhlbnRpY2F0ZWQiXSwic3ViIjoiMTk1MjAxIiwiaXNzIjoiaHR0cHM6Ly9hY2xlZGRhdGEuY29tLyJ9.JTmc4l2_TWtnkKG_gwJrktldES8nSd4BhWdu0-REHfgDOtPMZOoo9_ZNgcb7IfUGso-IVSTq-zv64GX4TGc3vJzsN-Yu5UNTpTYY4lLwVjhRTAYFbbgngKlezW1HlVuOx-F_wyT5nCi9Isay3hkLnNlMKxEJ1bHUkt8ZMLnpdg_dbRKFo50dXhDeTvNLnMixXQSU0lUIU18RbVhUQn22bbuaDmu_ijqHce2SHOaIy6g3bfME0P4DIr0lhmHdB_LGUAJSjaJGh_rsqUSvbVAFkmGFhUYWvSOiGY45fnRgglSl5m-cy0jH4U8wHCkq9MR-RQWKBamd2sWGxeDWKPWonA" 
-EMAIL = "23122003@student.hcmus.edu.vn"
+ACLED_ACCESS_TOKEN = os.environ.get('ACLED_ACCESS_TOKEN', '')
+ACLED_EMAIL = os.environ.get('ACLED_EMAIL', '')
 
 # 2. Ép Python dùng bảng mã UTF-8 khi in log ra màn hình
 if sys.stdout.encoding != 'utf-8':
@@ -16,7 +21,7 @@ def crawl_acled_iran():
     
     full_url = (
         f"https://acleddata.com/api/acled/read?"
-        f"email={EMAIL}&"
+        f"email={ACLED_EMAIL}&"
         f"country=Iran&"
         f"event_date=2025-04-10&"
         f"event_date_where=>=&"
@@ -25,7 +30,7 @@ def crawl_acled_iran():
     )
     
     headers = {
-        "Authorization": f"Bearer {ACCESS_TOKEN}",
+        "Authorization": f"Bearer {ACLED_ACCESS_TOKEN}",
         "Accept": "application/json",
         "User-Agent": "Mozilla/5.0"
     }
