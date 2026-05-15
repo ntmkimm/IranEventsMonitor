@@ -3,7 +3,7 @@ import os
 from .base_panel import DataPanel
 
 class MapPanel(DataPanel):
-    """Panel cho bản đồ 2D/3D hiển thị sự kiện"""
+    """Panel cho bản đồ 2D hiển thị sự kiện"""
     
     def __init__(self):
         super().__init__('Map', '/api/events', self.load_events)

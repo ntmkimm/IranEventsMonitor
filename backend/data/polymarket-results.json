@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-05-15T11:09:32.122145+00:00",
+  "fetched_at": "2026-05-15T12:17:26.857329+00:00",
   "tags": [
     "iran",
     "middle-east"
@@ -15,8 +15,8 @@
   "markets": [
     {
       "title": "Will no qualifying diplomatic US-Iran meeting occur by June 30, 2026?",
-      "yes_price": 43.2,
-      "volume": 6304313.194193998,
+      "yes_price": 43.5,
+      "volume": 6310985.424815999,
       "url": "https://polymarket.com/event/where-will-the-next-us-iran-diplomatic-meeting-happen-455",
       "end_date": "2026-06-30T00:00:00Z",
       "source": "polymarket"
@@ -24,39 +24,39 @@
     {
       "title": "Will Naftali Bennett be the next Prime Minister of Israel?",
       "yes_price": 37.5,
-      "volume": 8660443.389001,
+      "volume": 8662867.305334002,
       "url": "https://polymarket.com/event/who-will-be-the-next-prime-minister-of-israel-after-the-next-election",
       "end_date": "2026-12-31T00:00:00Z",
       "source": "polymarket"
     },
     {
       "title": "Will Mojtaba Khamenei be head of state in Iran end of 2026?",
-      "yes_price": 64.2,
-      "volume": 8247884.79544101,
+      "yes_price": 64.3,
+      "volume": 8248084.661545009,
       "url": "https://polymarket.com/event/iran-leader-end-of-2026",
-      "end_date": "2026-12-31T00:00:00Z",
-      "source": "polymarket"
-    },
-    {
-      "title": "US-Iran nuclear deal before 2027?",
-      "yes_price": 61.0,
-      "volume": 1324688.3377350033,
-      "url": "https://polymarket.com/event/us-iran-nuclear-deal-before-2027",
       "end_date": "2026-12-31T00:00:00Z",
       "source": "polymarket"
     },
     {
       "title": "Iran leadership change by December 31?",
       "yes_price": 34.5,
-      "volume": 13552479.201891989,
+      "volume": 13555855.549032988,
       "url": "https://polymarket.com/event/iran-leadership-change-by",
+      "end_date": "2026-12-31T00:00:00Z",
+      "source": "polymarket"
+    },
+    {
+      "title": "US-Iran nuclear deal before 2027?",
+      "yes_price": 61.5,
+      "volume": 1327858.2005860035,
+      "url": "https://polymarket.com/event/us-iran-nuclear-deal-before-2027",
       "end_date": "2026-12-31T00:00:00Z",
       "source": "polymarket"
     },
     {
       "title": "Will Israel strike 4 countries in 2026?",
       "yes_price": 30.6,
-      "volume": 6673773.269167998,
+      "volume": 6673800.450167999,
       "url": "https://polymarket.com/event/how-many-different-countries-will-israel-strike-in-2026",
       "end_date": "2026-12-31T00:00:00Z",
       "source": "polymarket"
@@ -64,39 +64,39 @@
     {
       "title": "Will the U.S. invade Iran before 2027?",
       "yes_price": 26.5,
-      "volume": 28196450.856722586,
+      "volume": 28198897.94625258,
       "url": "https://polymarket.com/event/will-the-us-invade-iran-before-2027",
       "end_date": "2026-12-31T00:00:00Z",
       "source": "polymarket"
     },
     {
       "title": "Will J.D. Vance attend the next US x Iran diplomatic meeting?",
-      "yes_price": 29.1,
-      "volume": 1172090.5654409982,
+      "yes_price": 28.2,
+      "volume": 1173345.7430289981,
       "url": "https://polymarket.com/event/who-will-attend-the-next-us-x-iran-diplomatic-meeting",
       "end_date": "2026-06-30T00:00:00Z",
       "source": "polymarket"
     },
     {
       "title": "US-Iran nuclear deal by June 30?",
-      "yes_price": 26.0,
-      "volume": 1847508.3662370075,
+      "yes_price": 27.0,
+      "volume": 1848503.0762370075,
       "url": "https://polymarket.com/event/us-iran-nuclear-deal-by-june-30",
       "end_date": "2026-06-30T00:00:00Z",
       "source": "polymarket"
     },
     {
       "title": " Iran agrees to end enrichment of uranium by June 30?",
-      "yes_price": 21.0,
-      "volume": 1359687.6973450023,
+      "yes_price": 21.5,
+      "volume": 1359800.9273450023,
       "url": "https://polymarket.com/event/iran-agrees-to-end-enrichment-of-uranium-by-june-30",
       "end_date": "2026-06-30T00:00:00Z",
       "source": "polymarket"
     },
     {
       "title": "Israel strike on Yemen by June 30, 2026?",
-      "yes_price": 20.0,
-      "volume": 1729503.8619339995,
+      "yes_price": 19.0,
+      "volume": 1730124.6619339995,
       "url": "https://polymarket.com/event/israel-strike-on-yemen-by-593",
       "end_date": "2026-06-30T00:00:00Z",
       "source": "polymarket"
@@ -104,7 +104,7 @@
     {
       "title": "Iran agrees to surrender enriched uranium stockpile by June 30, 2026?",
       "yes_price": 15.5,
-      "volume": 7096850.8078419985,
+      "volume": 7097538.833899999,
       "url": "https://polymarket.com/event/iran-agrees-to-surrender-enriched-uranium-stockpile-by",
       "end_date": "2026-06-30T00:00:00Z",
       "source": "polymarket"
@@ -127,8 +127,8 @@
     },
     {
       "title": "US x Iran permanent peace deal by May 31, 2026?",
-      "yes_price": 10.5,
-      "volume": 115043588.89564927,
+      "yes_price": 9.5,
+      "volume": 115368835.04372224,
       "url": "https://polymarket.com/event/us-x-iran-permanent-peace-deal-by",
       "end_date": "2026-05-31T00:00:00Z",
       "source": "polymarket"
@@ -142,19 +142,19 @@
       "source": "polymarket"
     },
     {
-      "title": "Iran coup attempt by June 30?",
-      "yes_price": 10.5,
-      "volume": 1114324.504280998,
-      "url": "https://polymarket.com/event/iran-coup-attempt-by-june-30",
-      "end_date": "2026-06-30T00:00:00Z",
-      "source": "polymarket"
-    },
-    {
       "title": "Will Syria join the Abraham Accords before 2027?",
       "yes_price": 11.5,
       "volume": 567135.176034,
       "url": "https://polymarket.com/event/which-country-will-join-abraham-accords-before-2027",
       "end_date": "2026-12-31T00:00:00Z",
+      "source": "polymarket"
+    },
+    {
+      "title": "Iran coup attempt by June 30?",
+      "yes_price": 9.5,
+      "volume": 1114921.4998349978,
+      "url": "https://polymarket.com/event/iran-coup-attempt-by-june-30",
+      "end_date": "2026-06-30T00:00:00Z",
       "source": "polymarket"
     },
     {
@@ -167,16 +167,16 @@
     },
     {
       "title": "Will Reza Pahlavi lead Iran in 2026?",
-      "yes_price": 8.0,
-      "volume": 1169916.1499500086,
+      "yes_price": 7.8,
+      "volume": 1172173.4225950087,
       "url": "https://polymarket.com/event/will-reza-pahlavi-lead-iran-in-2026",
       "end_date": "2026-12-31T00:00:00Z",
       "source": "polymarket"
     },
     {
       "title": "Iran Nuke before 2027?",
-      "yes_price": 8.9,
-      "volume": 602029.4488180048,
+      "yes_price": 9.0,
+      "volume": 602040.4257650048,
       "url": "https://polymarket.com/event/iran-nuke-before-2027",
       "end_date": "2026-12-31T00:00:00Z",
       "source": "polymarket"
@@ -191,8 +191,8 @@
     },
     {
       "title": "US-Iran nuclear deal by May 31?",
-      "yes_price": 7.0,
-      "volume": 592366.2914119996,
+      "yes_price": 6.5,
+      "volume": 594130.3709049997,
       "url": "https://polymarket.com/event/us-iran-nuclear-deal-by-may-31-974",
       "end_date": "2026-05-31T00:00:00Z",
       "source": "polymarket"
@@ -200,7 +200,7 @@
     {
       "title": "Iran agrees to end enrichment of uranium by May 31?",
       "yes_price": 5.5,
-      "volume": 610085.0478049995,
+      "volume": 612156.4978049996,
       "url": "https://polymarket.com/event/iran-agrees-to-end-enrichment-of-uranium-by-may-31-945",
       "end_date": "2026-05-31T00:00:00Z",
       "source": "polymarket"

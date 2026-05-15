@@ -80,7 +80,7 @@ function drawMarkers2D(eventData) {
         let eventsHtml = group.events.map(e => `
             <div style="border-bottom: 1px dotted #555; padding-bottom: 8px; margin-bottom: 8px;">
                 <strong style="font-size: 12px; color: #ffaa00;">▶ ${e.date}</strong><br>
-                <span style="font-size: 13px; color: #ddd; line-height: 1.4;">${e.notes || 'Không có mô tả.'}</span>
+                <span style="font-size: 13px; color: #000; line-height: 1.4;">${e.notes || 'Không có mô tả.'}</span>
             </div>
         `).join('');
 
@@ -88,7 +88,7 @@ function drawMarkers2D(eventData) {
             <div style="color: #fff; min-width: 250px; max-width: 320px; font-family: sans-serif;">
                 <h4 style="margin: 0 0 10px 0; color: #ff4444; font-size: 15px; border-bottom: 1px solid #ff4444; padding-bottom: 5px;">
                     📍 ${group.location || 'Khu vực không xác định'} 
-                    <span style="font-size:12px; color:#aaa">(${group.events.length} vụ)</span>
+                    <span style="font-size:12px; color:#aaa">(${group.events.length})</span>
                 </h4>
                 <div class="event-scroll-list" style="max-height: 250px; overflow-y: auto; padding-right: 8px;">
                     ${eventsHtml}
