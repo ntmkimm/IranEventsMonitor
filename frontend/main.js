@@ -574,18 +574,97 @@ async function loadPolymarket() {
     } catch (e) { console.error("Polymarket error:", e); }
 }
 
-// 4. CẬP NHẬT HÀM REFRESH
+
+// Thêm vào đầu file main.js các biến quản lý OpenSky
+let openskyLayerGroup = L.layerGroup();
+
+// 1. TẢI VÀ RENDER OPENSKY
+async function loadOpenSky() {
+    try {
+        const res = await fetch(`${API_BASE}/opensky`);
+        const data = await res.json();
+        const flights = data.flights || [];
+        const summary = data.summary || {};
+
+        // Cập nhật Posture Badge
+        const postureEl = document.getElementById('opensky-posture');
+        postureEl.className = 'posture-badge';
+        if (summary.posture === 'CRITICAL') postureEl.classList.add('posture-critical');
+        else if (summary.posture === 'ELEVATED') postureEl.classList.add('posture-elevated');
+        postureEl.innerText = summary.posture;
+
+        // Render lên bản đồ 2D
+        if (myMap2D) {
+            openskyLayerGroup.clearLayers();
+            flights.forEach(f => {
+                if (f.lat && f.lon) {
+                    // Chọn màu sắc dựa trên loại máy bay
+                    let color = "#3388ff"; // Default military
+                    if (f.type === 'TANKER') color = "#ff0000"; // Tiếp dầu (Cảnh báo cao)
+                    if (f.type === 'RECON') color = "#ffaa00";  // Trinh sát
+
+                    const planeMarker = L.circleMarker([f.lat, f.lon], {
+                        radius: 7,
+                        fillColor: color,
+                        color: "#fff",
+                        weight: 1,
+                        fillOpacity: 1
+                    }).addTo(openskyLayerGroup);
+
+                    planeMarker.bindPopup(`
+                        <div style="background:#111; color:white; padding:5px;">
+                            <b style="color:${color}">${f.callsign}</b> [${f.type}]<br>
+                            Alt: ${f.alt}<br>
+                            Reason: <small>${f.reason}</small><br>
+                            Origin: ${f.origin}
+                        </div>
+                    `);
+                }
+            });
+            openskyLayerGroup.addTo(myMap2D);
+        }
+
+        // Render List Panel
+        const container = document.getElementById('opensky-content');
+        let html = '';
+
+        // Hiển thị cảnh báo biên đội nếu có
+        if (summary.hasStrikePackage) {
+            html += `<div class="strike-alert">⚠️ WARNING: STRIKE PACKAGE (TANKER + RECON) DETECTED</div>`;
+        }
+
+        html += flights.map(f => `
+            <div class="air-item">
+                <div>
+                    <div class="air-callsign">${f.callsign}</div>
+                    <div class="air-type">${f.type} - ${f.origin}</div>
+                </div>
+                <div class="air-alt">${f.alt}</div>
+            </div>
+        `).join('');
+
+        container.innerHTML = html || '<div class="placeholder">No military traffic detected</div>';
+
+    } catch (e) {
+        console.error("OpenSky error:", e);
+    }
+}
+
+// 2. CẬP NHẬT HÀM setupNewRefreshButtons (Thêm OpenSky vào danh sách cấu hình)
+// Tìm hàm setupNewRefreshButtons hiện tại và thêm vào mảng configs:
 function setupNewRefreshButtons() {
     const configs = [
         { id: 'btn-refresh-liveuamap', url: '/refresh/liveuamap', callback: loadLiveuamap },
         { id: 'btn-refresh-telegram', url: '/refresh/telegram', callback: loadTelegram },
-        { id: 'btn-refresh-polymarket', url: '/refresh/polymarket', callback: loadPolymarket }
+        { id: 'btn-refresh-polymarket', url: '/refresh/polymarket', callback: loadPolymarket },
+        { id: 'btn-refresh-opensky', url: '/refresh/opensky', callback: loadOpenSky } // MỚI
     ];
 
     configs.forEach(cfg => {
         const btn = document.getElementById(cfg.id);
         if (!btn) return;
         btn.onclick = async () => {
+            const originalText = btn.innerText;
             btn.innerText = '⏳...';
             btn.disabled = true;
             try {
@@ -593,9 +672,17 @@ function setupNewRefreshButtons() {
                 setTimeout(async () => {
                     await cfg.callback();
                     btn.innerText = '✅ OK';
-                    setTimeout(() => { btn.innerText = btn.innerText.replace('✅ OK', cfg.id.split('-')[2].toUpperCase()); btn.disabled = false; }, 2000);
+                    setTimeout(() => { 
+                        // Trả lại text ban đầu (Ví dụ: ✈️ SYNC AIR INTEL)
+                        btn.innerText = originalText; 
+                        btn.disabled = false; 
+                    }, 2000);
                 }, 2000);
-            } catch (e) { btn.innerText = '❌'; btn.disabled = false; }
+            } catch (e) { 
+                btn.innerText = '❌'; 
+                btn.disabled = false; 
+                setTimeout(() => { btn.innerText = originalText; }, 2000);
+            }
         };
     });
 }
@@ -621,6 +708,7 @@ async function init() {
     
     // Auto refresh security every 5 minutes
     setInterval(loadSecurityAdvisories, 300000);
+    setInterval(loadOpenSky, 120000);
 }
 
 // Run initialization

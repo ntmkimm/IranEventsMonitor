@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-05-15T01:57:51.825943+00:00",
+  "fetched_at": "2026-05-15T03:18:11.044306+00:00",
   "tags": [
     "iran",
     "middle-east"
@@ -10,7 +10,7 @@
       "middle-east": 30
     },
     "raw_markets": 44,
-    "ranked_markets": 27
+    "ranked_markets": 26
   },
   "markets": [
     {
@@ -23,32 +23,32 @@
     },
     {
       "title": "Will no qualifying diplomatic US-Iran meeting occur by June 30, 2026?",
-      "yes_price": 40.9,
-      "volume": 5590421.223234999,
+      "yes_price": 41.9,
+      "volume": 5591049.04032,
       "url": "https://polymarket.com/event/where-will-the-next-us-iran-diplomatic-meeting-happen-455",
       "end_date": "2026-06-30T00:00:00Z",
       "source": "polymarket"
     },
     {
-      "title": "Will Mojtaba Khamenei be head of state in Iran end of 2026?",
-      "yes_price": 63.4,
-      "volume": 8092955.793819009,
-      "url": "https://polymarket.com/event/iran-leader-end-of-2026",
+      "title": "Will Naftali Bennett be the next Prime Minister of Israel?",
+      "yes_price": 38.0,
+      "volume": 8565676.757878,
+      "url": "https://polymarket.com/event/who-will-be-the-next-prime-minister-of-israel-after-the-next-election",
       "end_date": "2026-12-31T00:00:00Z",
       "source": "polymarket"
     },
     {
-      "title": "Will Naftali Bennett be the next Prime Minister of Israel?",
-      "yes_price": 35.0,
-      "volume": 8449356.745795,
-      "url": "https://polymarket.com/event/who-will-be-the-next-prime-minister-of-israel-after-the-next-election",
+      "title": "Will Mojtaba Khamenei be head of state in Iran end of 2026?",
+      "yes_price": 63.4,
+      "volume": 8094661.10381901,
+      "url": "https://polymarket.com/event/iran-leader-end-of-2026",
       "end_date": "2026-12-31T00:00:00Z",
       "source": "polymarket"
     },
     {
       "title": "Iran leadership change by December 31?",
       "yes_price": 34.5,
-      "volume": 13528029.60307099,
+      "volume": 13528243.823830988,
       "url": "https://polymarket.com/event/iran-leadership-change-by",
       "end_date": "2026-12-31T00:00:00Z",
       "source": "polymarket"
@@ -56,7 +56,7 @@
     {
       "title": "Will Israel strike 4 countries in 2026?",
       "yes_price": 30.1,
-      "volume": 6671198.038167998,
+      "volume": 6672506.0001679985,
       "url": "https://polymarket.com/event/how-many-different-countries-will-israel-strike-in-2026",
       "end_date": "2026-12-31T00:00:00Z",
       "source": "polymarket"
@@ -64,14 +64,14 @@
     {
       "title": "Will the U.S. invade Iran before 2027?",
       "yes_price": 27.5,
-      "volume": 28126067.701848585,
+      "volume": 28127005.782217585,
       "url": "https://polymarket.com/event/will-the-us-invade-iran-before-2027",
       "end_date": "2026-12-31T00:00:00Z",
       "source": "polymarket"
     },
     {
       "title": "Will J.D. Vance attend the next US x Iran diplomatic meeting?",
-      "yes_price": 28.0,
+      "yes_price": 28.1,
       "volume": 1170744.8762519984,
       "url": "https://polymarket.com/event/who-will-attend-the-next-us-x-iran-diplomatic-meeting",
       "end_date": "2026-06-30T00:00:00Z",
@@ -104,7 +104,7 @@
     {
       "title": "Iran agrees to surrender enriched uranium stockpile by June 30, 2026?",
       "yes_price": 15.5,
-      "volume": 7078567.845332999,
+      "volume": 7079425.546653999,
       "url": "https://polymarket.com/event/iran-agrees-to-surrender-enriched-uranium-stockpile-by",
       "end_date": "2026-06-30T00:00:00Z",
       "source": "polymarket"
@@ -112,7 +112,7 @@
     {
       "title": "Israel x Iran permanent peace deal by June 30, 2026?",
       "yes_price": 17.5,
-      "volume": 841481.684462,
+      "volume": 841681.684462,
       "url": "https://polymarket.com/event/israel-x-iran-permanent-peace-deal-by",
       "end_date": "2026-06-30T00:00:00Z",
       "source": "polymarket"
@@ -126,19 +126,19 @@
       "source": "polymarket"
     },
     {
-      "title": "US x Iran permanent peace deal by May 31, 2026?",
-      "yes_price": 11.5,
-      "volume": 113965819.84567629,
-      "url": "https://polymarket.com/event/us-x-iran-permanent-peace-deal-by",
-      "end_date": "2026-05-31T00:00:00Z",
-      "source": "polymarket"
-    },
-    {
       "title": "Israel and Syria normalize relations by December 31, 2026?",
       "yes_price": 14.0,
       "volume": 2075619.571787998,
       "url": "https://polymarket.com/event/israel-and-syria-normalize-relations-in-2025",
       "end_date": "2025-12-31T00:00:00Z",
+      "source": "polymarket"
+    },
+    {
+      "title": "US x Iran permanent peace deal by May 31, 2026?",
+      "yes_price": 10.5,
+      "volume": 114259476.97580028,
+      "url": "https://polymarket.com/event/us-x-iran-permanent-peace-deal-by",
+      "end_date": "2026-05-31T00:00:00Z",
       "source": "polymarket"
     },
     {
@@ -152,7 +152,7 @@
     {
       "title": "Iran coup attempt by June 30?",
       "yes_price": 10.5,
-      "volume": 1113972.084280998,
+      "volume": 1114017.084280998,
       "url": "https://polymarket.com/event/iran-coup-attempt-by-june-30",
       "end_date": "2026-06-30T00:00:00Z",
       "source": "polymarket"
@@ -200,23 +200,15 @@
     {
       "title": "US-Iran nuclear deal by May 31?",
       "yes_price": 7.5,
-      "volume": 583170.1347889998,
+      "volume": 583175.5971459998,
       "url": "https://polymarket.com/event/us-iran-nuclear-deal-by-may-31-974",
       "end_date": "2026-05-31T00:00:00Z",
       "source": "polymarket"
     },
     {
-      "title": "Israel and Indonesia normalize relations by June 30, 2026?",
-      "yes_price": 5.1,
-      "volume": 1620200.1512400003,
-      "url": "https://polymarket.com/event/israel-and-indonesia-normalize-relations-by",
-      "end_date": "2026-06-30T00:00:00Z",
-      "source": "polymarket"
-    },
-    {
       "title": "Will France, UK, or Germany strike Iran by June 30?",
       "yes_price": 5.0,
-      "volume": 1315496.2352960045,
+      "volume": 1315532.9152960046,
       "url": "https://polymarket.com/event/will-france-uk-or-germany-strike-iran-by-june-30-259",
       "end_date": "2026-06-30T00:00:00Z",
       "source": "polymarket"

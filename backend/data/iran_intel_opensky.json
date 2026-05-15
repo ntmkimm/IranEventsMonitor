@@ -1,0 +1,16 @@
+{
+    "snapshot_time": "2026-05-15T03:07:35.584856",
+    "count": 1,
+    "flights": [
+        {
+            "callsign": "RFR7331",
+            "hex": "43C972",
+            "type": "TRANSPORT",
+            "reason": "Strict Military Pattern",
+            "origin": "United Kingdom",
+            "alt": "5791m",
+            "lat": 34.2563,
+            "lon": 33.259
+        }
+    ]
+}

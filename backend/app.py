@@ -15,8 +15,9 @@ from panels.webcam_panel import webcam_panel
 from panels.map_panel import map_panel
 from panels.security_panel import security_panel
 from panels.liveuamap_panel import liveuamap_panel
-from panels.telegram_panel import telegram_panel      # MỚI
-from panels.polymarket_panel import polymarket_panel  # MỚI
+from panels.telegram_panel import telegram_panel      
+from panels.polymarket_panel import polymarket_panel  
+from panels.opensky_panel import opensky_panel        # MỚI
 
 app = Flask(__name__)
 CORS(app)
@@ -86,6 +87,17 @@ def run_polymarket_crawl():
             print("✅ Polymarket crawl completed")
         else:
             print(f"❌ Polymarket crawl failed: {result.stderr}")
+
+def run_opensky_crawl():
+    """Chạy crawl OpenSky Military Tracker"""
+    print("✈️ Running OpenSky crawl...")
+    script_path = os.path.join(os.path.dirname(__file__), 'crawlers', 'iran_opensky_crawler.py')
+    if os.path.exists(script_path):
+        result = subprocess.run(['python', script_path], capture_output=True, text=True)
+        if result.returncode == 0:
+            print("✅ OpenSky crawl completed")
+        else:
+            print(f"❌ OpenSky crawl failed: {result.stderr}")
 
 # ============ API ENDPOINTS ============
 
@@ -167,6 +179,20 @@ def get_polymarket():
         print(f"Error reading polymarket data: {e}")
         return jsonify({'markets': [], 'stats': {}})
 
+@app.route('/api/opensky', methods=['GET'])
+def get_opensky():
+    """OpenSky military flight data"""
+    try:
+        flights = opensky_panel.load_military_flights()
+        summary = opensky_panel.get_summary()
+        return jsonify({
+            'flights': flights,
+            'summary': summary
+        })
+    except Exception as e:
+        print(f"Error reading opensky data: {e}")
+        return jsonify({'flights': [], 'summary': {}})
+
 # ============ REFRESH API ============
 
 @app.route('/api/refresh/acled', methods=['POST'])
@@ -199,6 +225,11 @@ def refresh_polymarket():
     threading.Thread(target=run_polymarket_crawl).start()
     return jsonify({'message': 'Polymarket crawl started'})
 
+@app.route('/api/refresh/opensky', methods=['POST'])
+def refresh_opensky():
+    threading.Thread(target=run_opensky_crawl).start()
+    return jsonify({'message': 'OpenSky crawl started'})
+
 # ============ WEBCAM API ============
 
 @app.route('/api/webcams', methods=['GET'])
@@ -229,7 +260,8 @@ def health_check():
             'security': os.path.exists(os.path.join(os.path.dirname(__file__), 'data', 'security_advisories.json')),
             'liveuamap': os.path.exists(os.path.join(os.path.dirname(__file__), 'data', 'iran-events-latest.json')),
             'telegram': os.path.exists(os.path.join(os.path.dirname(__file__), 'data', 'telegram_results.json')),
-            'polymarket': os.path.exists(os.path.join(os.path.dirname(__file__), 'data', 'polymarket-results.json'))
+            'polymarket': os.path.exists(os.path.join(os.path.dirname(__file__), 'data', 'polymarket-results.json')),
+            'opensky': os.path.exists(os.path.join(os.path.dirname(__file__), 'data', 'iran_intel_opensky.json'))
         }
     })
 
@@ -241,6 +273,7 @@ scheduler.add_job(run_liveuamap_crawl, 'interval', minutes=15)
 scheduler.add_job(run_telegram_crawl, 'interval', minutes=20)
 scheduler.add_job(run_polymarket_crawl, 'interval', minutes=25)
 scheduler.add_job(run_oil_crawl, 'interval', minutes=15)
+scheduler.add_job(run_opensky_crawl, 'interval', minutes=5) # OpenSky cần cập nhật nhanh hơn (5 phút)
 scheduler.add_job(run_acled_crawl, 'interval', minutes=240)
 scheduler.start()
 
@@ -251,6 +284,7 @@ run_security_crawl()
 run_liveuamap_crawl()
 run_telegram_crawl()
 run_polymarket_crawl()
+run_opensky_crawl() # Chạy OpenSky lần đầu
 
 # ============ MAIN ============
 

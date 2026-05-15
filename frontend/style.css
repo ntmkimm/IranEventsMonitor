@@ -351,3 +351,47 @@ body, html {
 
 /* Liveuamap Card */
 .liveua-item { padding: 8px; border-left: 2px solid #ffaa00; background: rgba(255, 170, 0, 0.05); margin-bottom: 5px; font-size: 11px; }
+
+
+/* OpenSky Specific Styles */
+.posture-badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: bold;
+    background: #222;
+}
+.posture-critical { background: #ff0000; color: white; animation: blink 1s infinite; }
+.posture-elevated { background: #ffaa00; color: black; }
+
+@keyframes blink { 50% { opacity: 0.5; } }
+
+.air-item {
+    padding: 8px;
+    border-bottom: 1px solid #222;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+}
+.air-callsign { color: #ff4444; font-weight: bold; font-family: monospace; }
+.air-type { color: #aaa; font-size: 10px; }
+.air-alt { color: #00ffff; }
+
+/* Custom Airplane Marker */
+.plane-icon {
+    transition: transform 0.5s linear;
+}
+
+/* Alert for Strike Package */
+.strike-alert {
+    background: rgba(255, 0, 0, 0.2);
+    border: 1px solid #ff0000;
+    color: #ff4444;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 11px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 4px;
+}

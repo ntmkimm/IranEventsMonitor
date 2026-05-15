@@ -25,6 +25,8 @@
             <button id="btn-refresh-telegram" style="color: #0088cc; border-color: #0088cc;">📢 SYNC TELEGRAM</button>
             <button id="btn-refresh-polymarket" style="color: #8b5cf6; border-color: #8b5cf6;">📊 SYNC POLY</button>
 
+            <button id="btn-refresh-opensky" style="color: #ff4444; border-color: #ff4444;">✈️ SYNC AIR INTEL</button>
+
             <button id="btn-2d" class="active">2D TACTICAL</button>
             <button id="btn-3d">3D GLOBE</button>
             
@@ -102,6 +104,16 @@
                 </div>
             </div>
         </section>
+
+        <div id="opensky-panel" class="info-panel">
+            <div class="panel-header">
+                <span class="panel-title">✈️ MILITARY AIR TRAFFIC</span>
+                <div id="opensky-posture" class="posture-badge">NORMAL</div>
+            </div>
+            <div id="opensky-content" class="panel-content">
+                <div class="placeholder">Scanning airspace...</div>
+            </div>
+        </div>
     </main>
 
     <script type="module" src="./main.js"></script>
