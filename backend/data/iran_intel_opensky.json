@@ -1,5 +1,5 @@
 {
-    "snapshot_time": "2026-05-15T03:07:35.584856",
+    "snapshot_time": "2026-05-15T04:03:07.669978",
     "count": 1,
     "flights": [
         {
@@ -8,9 +8,9 @@
             "type": "TRANSPORT",
             "reason": "Strict Military Pattern",
             "origin": "United Kingdom",
-            "alt": "5791m",
-            "lat": 34.2563,
-            "lon": 33.259
+            "alt": "213m",
+            "lat": 34.5806,
+            "lon": 33.0251
         }
     ]
 }

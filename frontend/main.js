@@ -578,6 +578,16 @@ async function loadPolymarket() {
 // Thêm vào đầu file main.js các biến quản lý OpenSky
 let openskyLayerGroup = L.layerGroup();
 
+// Tạo hàm để định nghĩa Icon máy bay
+const createPlaneIcon = (color, heading) => {
+    return L.divIcon({
+        html: `<i class="fas fa-plane" style="color: ${color}; transform: rotate(${heading || 0}deg); font-size: 18px;"></i>`,
+        className: 'custom-plane-icon',
+        iconSize: [20, 20],
+        iconAnchor: [10, 10]
+    });
+};
+
 // 1. TẢI VÀ RENDER OPENSKY
 async function loadOpenSky() {
     try {
@@ -596,27 +606,39 @@ async function loadOpenSky() {
         // Render lên bản đồ 2D
         if (myMap2D) {
             openskyLayerGroup.clearLayers();
+            
             flights.forEach(f => {
-                if (f.lat && f.lon) {
-                    // Chọn màu sắc dựa trên loại máy bay
-                    let color = "#3388ff"; // Default military
-                    if (f.type === 'TANKER') color = "#ff0000"; // Tiếp dầu (Cảnh báo cao)
-                    if (f.type === 'RECON') color = "#ffaa00";  // Trinh sát
+                // Chuyển tọa độ sang số để tránh lỗi nếu API trả về string
+                const lat = parseFloat(f.lat);
+                const lon = parseFloat(f.lon);
 
-                    const planeMarker = L.circleMarker([f.lat, f.lon], {
-                        radius: 7,
-                        fillColor: color,
-                        color: "#fff",
-                        weight: 1,
-                        fillOpacity: 1
+                if (!isNaN(lat) && !isNaN(lon)) {
+                    // 1. Chọn màu sắc
+                    let color = "#007bff"; 
+                    if (f.type === 'TANKER') color = "#d32f2f"; 
+                    if (f.type === 'RECON') color = "#f57c00";  
+
+                    // 2. Tạo Marker với Icon có kích thước cố định
+                    const planeMarker = L.marker([lat, lon], {
+                        icon: L.divIcon({
+                            className: 'plane-marker-container', // Class để điều khiển trong CSS
+                            html: `
+                                <div class="plane-vessel" style="transform: rotate(${(f.heading || 0) - 45}deg);">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="${color}" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M21,16L21,14L13,9L13,3.5A1.5,1.5 0 0,0 11.5,2A1.5,1.5 0 0,0 10,3.5L10,9L2,14L2,16L10,13.5L10,18L8,19.5L8,21L11.5,20L15,21L15,19.5L13,18L13,13.5L21,16Z" />
+                                    </svg>
+                                </div>`,
+                            iconSize: [24, 24],     // Cực kỳ quan trọng: Định nghĩa kích thước icon
+                            iconAnchor: [12, 12]    // Đặt tâm icon vào đúng tọa độ
+                        }),
+                        zIndexOffset: 1000
                     }).addTo(openskyLayerGroup);
 
                     planeMarker.bindPopup(`
-                        <div style="background:#111; color:white; padding:5px;">
-                            <b style="color:${color}">${f.callsign}</b> [${f.type}]<br>
-                            Alt: ${f.alt}<br>
-                            Reason: <small>${f.reason}</small><br>
-                            Origin: ${f.origin}
+                        <div style="color:#333; min-width:150px;">
+                            <b style="color:${color}; font-size:14px;">${f.callsign || 'N/A'}</b> [${f.type}]<br>
+                            <hr style="margin:5px 0; border:0; border-top:1px solid #eee;">
+                            <b>Alt:</b> ${f.alt} | <b>Base:</b> ${f.origin}
                         </div>
                     `);
                 }
