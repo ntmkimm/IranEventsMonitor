@@ -19,7 +19,8 @@ from panels.liveuamap_panel import liveuamap_panel
 from panels.telegram_panel import telegram_panel      
 from panels.polymarket_panel import polymarket_panel  
 from panels.opensky_panel import opensky_panel
-from panels.gdelt_panel import gdelt_panel            # MỚI
+from panels.gdelt_panel import gdelt_panel            
+from panels.insight_panel import insight_panel 
 
 app = Flask(__name__)
 CORS(app)
@@ -111,6 +112,16 @@ def run_gdelt_crawl(): # MỚI
             print("✅ GDELT crawl completed")
         else:
             print(f"❌ GDELT crawl failed: {result.stderr}")
+            
+def run_insight_generation():
+    """Chạy script generate insight từ LLM"""
+    print("🧠 Starting LLM Insight generation...")
+    script_path = os.path.join(os.path.dirname(__file__), 'insight_summarize.py')
+    result = subprocess.run(['python', script_path], capture_output=True, text=True)
+    if result.returncode == 0:
+        print("✅ Insight generation completed")
+    else:
+        print(f"❌ Insight generation failed: {result.stderr}")
 
 # ============ API ENDPOINTS ============
 
@@ -218,6 +229,12 @@ def get_gdelt():
     except Exception as e:
         print(f"Error reading GDELT data: {e}")
         return jsonify({'articles': [], 'totalCount': 0})
+    
+@app.route('/api/insight', methods=['GET'])
+def get_insight():
+    """Lấy kết quả phân tích từ LLM"""
+    data = insight_panel.load_insight()
+    return jsonify(data)
 
 # ============ REFRESH API ============
 
@@ -261,6 +278,12 @@ def refresh_gdelt():
     threading.Thread(target=run_gdelt_crawl).start()
     return jsonify({'message': 'GDELT crawl started'})
 
+@app.route('/api/refresh/insight', methods=['POST'])
+def refresh_insight():
+    """Trigger tạo insight mới"""
+    threading.Thread(target=run_insight_generation).start()
+    return jsonify({'message': 'Insight generation started'})
+
 # ============ WEBCAM API ============
 
 @app.route('/api/webcams', methods=['GET'])
@@ -293,7 +316,8 @@ def health_check():
             'telegram': os.path.exists(os.path.join(os.path.dirname(__file__), 'data', 'telegram_results.json')),
             'polymarket': os.path.exists(os.path.join(os.path.dirname(__file__), 'data', 'polymarket-results.json')),
             'opensky': os.path.exists(os.path.join(os.path.dirname(__file__), 'data', 'iran_intel_opensky.json')),
-            'gdelt': os.path.exists(os.path.join(os.path.dirname(__file__), 'data', 'gdelt_iran_us_energy.json')) # MỚI
+            'gdelt': os.path.exists(os.path.join(os.path.dirname(__file__), 'data', 'gdelt_iran_us_energy.json')),
+            'insight': os.path.exists(os.path.join(os.path.dirname(__file__), 'data', 'intelligence_insight.json'))
         }
     })
 
@@ -306,8 +330,9 @@ scheduler.add_job(run_telegram_crawl, 'interval', minutes=20)
 scheduler.add_job(run_polymarket_crawl, 'interval', minutes=25)
 scheduler.add_job(run_oil_crawl, 'interval', minutes=15)
 scheduler.add_job(run_opensky_crawl, 'interval', minutes=5)
-scheduler.add_job(run_gdelt_crawl, 'interval', minutes=30) # MỚI: Update GDELT mỗi 30 phút
+scheduler.add_job(run_gdelt_crawl, 'interval', minutes=30) 
 scheduler.add_job(run_acled_crawl, 'interval', minutes=240)
+scheduler.add_job(run_insight_generation, 'interval', minutes=120)
 scheduler.start()
 
 # Chạy lần đầu khi khởi động
