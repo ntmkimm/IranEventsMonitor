@@ -1,3 +1,4 @@
+# backend/app.py
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import subprocess
@@ -17,7 +18,8 @@ from panels.security_panel import security_panel
 from panels.liveuamap_panel import liveuamap_panel
 from panels.telegram_panel import telegram_panel      
 from panels.polymarket_panel import polymarket_panel  
-from panels.opensky_panel import opensky_panel        # MỚI
+from panels.opensky_panel import opensky_panel
+from panels.gdelt_panel import gdelt_panel            # MỚI
 
 app = Flask(__name__)
 CORS(app)
@@ -98,6 +100,17 @@ def run_opensky_crawl():
             print("✅ OpenSky crawl completed")
         else:
             print(f"❌ OpenSky crawl failed: {result.stderr}")
+
+def run_gdelt_crawl(): # MỚI
+    """Chạy crawl GDELT News"""
+    print("📰 Running GDELT crawl...")
+    script_path = os.path.join(os.path.dirname(__file__), 'crawlers', 'gdelt_crawler.py')
+    if os.path.exists(script_path):
+        result = subprocess.run(['python', script_path], capture_output=True, text=True)
+        if result.returncode == 0:
+            print("✅ GDELT crawl completed")
+        else:
+            print(f"❌ GDELT crawl failed: {result.stderr}")
 
 # ============ API ENDPOINTS ============
 
@@ -193,6 +206,19 @@ def get_opensky():
         print(f"Error reading opensky data: {e}")
         return jsonify({'flights': [], 'summary': {}})
 
+@app.route('/api/gdelt', methods=['GET']) # MỚI
+def get_gdelt():
+    """GDELT News data"""
+    try:
+        articles = gdelt_panel.get_articles_for_display()
+        return jsonify({
+            'articles': articles,
+            'totalCount': len(articles)
+        })
+    except Exception as e:
+        print(f"Error reading GDELT data: {e}")
+        return jsonify({'articles': [], 'totalCount': 0})
+
 # ============ REFRESH API ============
 
 @app.route('/api/refresh/acled', methods=['POST'])
@@ -230,6 +256,11 @@ def refresh_opensky():
     threading.Thread(target=run_opensky_crawl).start()
     return jsonify({'message': 'OpenSky crawl started'})
 
+@app.route('/api/refresh/gdelt', methods=['POST']) # MỚI
+def refresh_gdelt():
+    threading.Thread(target=run_gdelt_crawl).start()
+    return jsonify({'message': 'GDELT crawl started'})
+
 # ============ WEBCAM API ============
 
 @app.route('/api/webcams', methods=['GET'])
@@ -261,7 +292,8 @@ def health_check():
             'liveuamap': os.path.exists(os.path.join(os.path.dirname(__file__), 'data', 'iran-events-latest.json')),
             'telegram': os.path.exists(os.path.join(os.path.dirname(__file__), 'data', 'telegram_results.json')),
             'polymarket': os.path.exists(os.path.join(os.path.dirname(__file__), 'data', 'polymarket-results.json')),
-            'opensky': os.path.exists(os.path.join(os.path.dirname(__file__), 'data', 'iran_intel_opensky.json'))
+            'opensky': os.path.exists(os.path.join(os.path.dirname(__file__), 'data', 'iran_intel_opensky.json')),
+            'gdelt': os.path.exists(os.path.join(os.path.dirname(__file__), 'data', 'gdelt_iran_us_energy.json')) # MỚI
         }
     })
 
@@ -273,18 +305,20 @@ scheduler.add_job(run_liveuamap_crawl, 'interval', minutes=15)
 scheduler.add_job(run_telegram_crawl, 'interval', minutes=20)
 scheduler.add_job(run_polymarket_crawl, 'interval', minutes=25)
 scheduler.add_job(run_oil_crawl, 'interval', minutes=15)
-scheduler.add_job(run_opensky_crawl, 'interval', minutes=5) # OpenSky cần cập nhật nhanh hơn (5 phút)
+scheduler.add_job(run_opensky_crawl, 'interval', minutes=5)
+scheduler.add_job(run_gdelt_crawl, 'interval', minutes=30) # MỚI: Update GDELT mỗi 30 phút
 scheduler.add_job(run_acled_crawl, 'interval', minutes=240)
 scheduler.start()
 
 # Chạy lần đầu khi khởi động
-print("🔄 Running initial crawls...")
-run_oil_crawl()
-run_security_crawl()
-run_liveuamap_crawl()
-run_telegram_crawl()
-run_polymarket_crawl()
-run_opensky_crawl() # Chạy OpenSky lần đầu
+# print("🔄 Running initial crawls...")
+# run_oil_crawl()
+# run_security_crawl()
+# run_liveuamap_crawl()
+# run_telegram_crawl()
+# run_polymarket_crawl()
+# run_opensky_crawl()
+# run_gdelt_crawl() # MỚI: Chạy GDELT lần đầu
 
 # ============ MAIN ============
 
