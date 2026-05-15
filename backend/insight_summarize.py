@@ -15,7 +15,7 @@ LLM_MODEL = os.getenv("LLM_MODEL")
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 OUTPUT_FILE = os.path.join(DATA_DIR, "intelligence_insight.json")
 
-def smart_truncate(data, limit=10):
+def smart_truncate(data, limit=100):
     if isinstance(data, list):
         return data[:limit]
     if isinstance(data, dict):
@@ -28,7 +28,7 @@ def load_all_json_data():
     for file_path in json_files:
         file_name = os.path.basename(file_path)
         # Bỏ qua chính file insight để tránh loop dữ liệu cũ
-        if file_name == "intelligence_insight.json":
+        if file_name == "intelligence_insight.json" or file_name == "telegram_channels.json":
             continue
         try:
             with open(file_path, 'r', encoding='utf-8') as f:
@@ -50,10 +50,13 @@ def generate_and_save_insight():
 
     Please provide a structured intelligence report in English covering:
     - Oil prices and trends.
-    - News & Conflict (GDELT, Liveuamap, Telegram).
     - Aviation status (OpenSky).
-    - Security & Travel risks.
-    - Strategic outlook.
+    - Critical: News & Conflict (GDELT, Liveuamap, Telegram).
+        Key Themes, Significant Events, Conflict Zones, Diplomatic Efforts, Local Protests, Military Activities.
+    - Critical: Security & Travel risks.
+        Do Not Travel, Reconsider Travel, Caution.
+    - Critical: Strategic outlook.
+    - Conclusion.
     Format the output in professional Markdown.
     """
 
