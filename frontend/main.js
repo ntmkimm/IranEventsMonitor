@@ -268,8 +268,9 @@ function renderSecurityAdvisories() {
         const levelLabel = adv.level === 'do-not-travel' ? 'DO NOT TRAVEL' :
                           (adv.level === 'reconsider' ? 'RECONSIDER' : 'CAUTION');
         
-        const date = new Date(adv.pubDate);
-        const timeAgo = `${Math.floor((Date.now() - date.getTime()) / 3600000)}h ago`;
+        // BỎ 2 DÒNG TỰ TÍNH TOÁN CŨ ĐI
+        // Chỉ cần lấy thẳng chuỗi timeAgo đã được Python tính toán sẵn từ file JSON
+        const timeAgo = adv.timeAgo;
         
         return `
             <div class="sec-item">
@@ -659,32 +660,38 @@ function setupNewRefreshButtons() {
     const btnInsight = document.getElementById('btn-refresh-insight');
     if (btnInsight) {
         btnInsight.onclick = async () => {
-            btnInsight.innerText = '⏳ AI ĐANG NGHĨ...';
+            btnInsight.innerText = '⏳ AI is thinking...';
             btnInsight.disabled = true;
             document.getElementById('insight-content').innerHTML = `
-                <div style="text-align:center; padding: 20px; color:#ffaa00;">
+                <div style="text-align:center; padding: 20px; color:#ffaa00; line-height: 1.5;">
                     <i class="fas fa-brain" style="font-size:24px; margin-bottom:10px;"></i><br>
-                    AI đang thu thập dữ liệu và phân tích cục diện...<br>
-                    (Vui lòng đợi khoảng 30 - 60 giây)
+                    AI is analyzing global data...<br>
+                    <span style="font-size: 12px; color: #888;">(Please wait, this usually takes 15 - 45 seconds)</span>
                 </div>`;
             
             try {
-                // Gọi API kích hoạt crawler AI
-                await fetch(`${API_BASE}/refresh/insight`, { method: 'POST' });
+                // await fetch sẽ TỰ ĐỘNG ĐỢI cho đến khi backend (LLM) chạy xong và trả về kết quả
+                const response = await fetch(`${API_BASE}/refresh/insight`, { method: 'POST' });
                 
-                // Đợi 45 giây để LLM tạo xong chữ rồi mới gọi hàm load lại
-                setTimeout(async () => {
-                    await loadInsight();
-                    btnInsight.innerText = '✅ OK';
-                    setTimeout(() => { 
-                        btnInsight.innerText = '🔄 SYNC'; 
-                        btnInsight.disabled = false; 
-                    }, 3000);
-                }, 45000); // 45000ms = 45 giây
+                if (!response.ok) throw new Error("API Error");
+
+                // Ngay khi backend chạy xong, lập tức gọi hàm load lại dữ liệu
+                await loadInsight();
+                
+                btnInsight.innerText = '✅ OK';
+                setTimeout(() => { 
+                    btnInsight.innerText = '🔄 SYNC'; 
+                    btnInsight.disabled = false; 
+                }, 3000);
                 
             } catch (e) {
-                btnInsight.innerText = '❌ LỖI';
+                console.error("AI Refresh Error:", e);
+                btnInsight.innerText = '❌ FAILED';
                 btnInsight.disabled = false;
+                document.getElementById('insight-content').innerHTML = `
+                    <div style="color:#ff4444; text-align:center; padding: 20px;">
+                        ⚠️ Failed to generate AI insight. Please try again.
+                    </div>`;
             }
         };
     }
@@ -701,11 +708,11 @@ async function loadInsight() {
             // Dùng thư viện marked.js để render văn bản AI ra HTML xịn xò
             container.innerHTML = marked.parse(data.content);
         } else {
-            container.innerHTML = '<div class="placeholder" style="color:#aaa;">Chưa có dữ liệu phân tích. Hãy bấm SYNC.</div>';
+            container.innerHTML = '<div class="placeholder" style="color:#aaa;">No analysis data available. Please click GET INSIGHT.</div>';
         }
     } catch (e) { 
         console.error("Insight error:", e); 
-        document.getElementById('insight-content').innerHTML = '<div class="placeholder" style="color:red;">Lỗi tải AI Insight.</div>';
+        document.getElementById('insight-content').innerHTML = '<div class="placeholder" style="color:red;">Failed to load AI Insight.</div>';
     }
 }
 
@@ -721,8 +728,8 @@ function setupInsightButton() {
         document.getElementById('insight-content').innerHTML = `
             <div style="text-align:center; padding: 20px; color:#ffaa00;">
                 <i class="fas fa-brain" style="font-size:24px; margin-bottom:10px;"></i><br>
-                AI đang thu thập dữ liệu và phân tích cục diện...<br>
-                (Vui lòng đợi khoảng 45 - 60 giây)
+                AI is analyzing...<br>
+                (Please wait 45 - 60 seconds)
             </div>`;
         
         try {
@@ -742,7 +749,7 @@ function setupInsightButton() {
             }, 45000); // 45000ms = 45 giây
             
         } catch (e) {
-            btnInsight.innerText = '❌ LỖI';
+            btnInsight.innerText = '❌ FAILED';
             btnInsight.disabled = false;
         }
     };
@@ -803,6 +810,421 @@ function setupSyncAllButton() {
     };
 }
 
+// ============ OIL CHART MODAL ============
+let oilChart = null;
+let currentSymbol = 'BZ=F';
+let cachedOilData = null;
+
+async function loadOilChartData(symbol = 'BZ=F', forceRefresh = false) {
+    if (cachedOilData && !forceRefresh) {
+        console.log('Using cached oil data');
+        if (symbol === 'both') {
+            return {
+                brent: cachedOilData['BZ=F'],
+                wti: cachedOilData['CL=F']
+            };
+        }
+        return cachedOilData[symbol];
+    }
+    
+    try {
+        console.log('Fetching fresh oil data...');
+        const response = await fetch('http://localhost:3000/api/oil/history');
+        const data = await response.json();
+        
+        if (data.error || !data.data) {
+            console.error('No oil data:', data);
+            return null;
+        }
+        
+        cachedOilData = data.data;
+        
+        if (symbol === 'both') {
+            return {
+                brent: cachedOilData['BZ=F'],
+                wti: cachedOilData['CL=F']
+            };
+        }
+        return cachedOilData[symbol];
+    } catch (error) {
+        console.error('Failed to load oil data:', error);
+        return null;
+    }
+}
+
+function renderOilChart(oilData) {
+    const canvas = document.getElementById('oil-chart-canvas');
+    if (!canvas) {
+        console.error('Canvas not found');
+        return;
+    }
+    
+    const ctx = canvas.getContext('2d');
+    
+    if (oilChart) {
+        oilChart.destroy();
+        oilChart = null;
+    }
+    
+    // Compare mode
+    if (currentSymbol === 'both' && oilData.brent && oilData.wti) {
+        const dates = oilData.brent.history.map(h => h.date.slice(5));
+        const brentPrices = oilData.brent.history.map(h => h.price);
+        const wtiPrices = oilData.wti.history.map(h => h.price);
+        
+        const allPrices = [...brentPrices, ...wtiPrices];
+        const minPrice = Math.min(...allPrices) - 2;
+        const maxPrice = Math.max(...allPrices) + 2;
+        
+        oilChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [
+                    {
+                        label: 'Brent Crude (USD)',
+                        data: brentPrices,
+                        borderColor: '#ffaa00',
+                        backgroundColor: 'rgba(255, 170, 0, 0.05)',
+                        borderWidth: 2.5,
+                        pointRadius: 3,
+                        pointBackgroundColor: '#ffaa00',
+                        pointBorderColor: '#fff',
+                        fill: false,
+                        tension: 0.2
+                    },
+                    {
+                        label: 'WTI Crude (USD)',
+                        data: wtiPrices,
+                        borderColor: '#00ffaa',
+                        backgroundColor: 'rgba(0, 255, 170, 0.05)',
+                        borderWidth: 2.5,
+                        pointRadius: 3,
+                        pointBackgroundColor: '#00ffaa',
+                        pointBorderColor: '#fff',
+                        fill: false,
+                        tension: 0.2
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // SỬA THÀNH FALSE: Giúp biểu đồ fix cứng theo container, không bị nhảy chiều cao
+                animation: {
+                    duration: 500, // Rút ngắn thời gian vẽ (hoặc set thành 0 / false để tắt hẳn animation nếu không cần thiết)
+                    easing: 'easeOutQuart' // Làm mượt hiệu ứng lúc kết thúc
+                },
+                layout: {
+                    padding: 10 // Thêm khoảng lề cố định để trục X/Y không bị co giãn lúc hiện nhãn
+                },
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    legend: { labels: { color: '#fff' } },
+                    tooltip: { 
+                        callbacks: { 
+                            label: (ctx) => `${ctx.dataset.label}: $${ctx.raw} USD` 
+                        }
+                    }
+                },
+                scales: {
+                    x: { 
+                        ticks: { color: '#aaa', maxRotation: 45, autoSkip: true, maxTicksLimit: 8 }, 
+                        grid: { color: '#222' } 
+                    },
+                    y: { 
+                        ticks: { color: '#aaa', callback: v => '$' + v }, 
+                        min: minPrice, 
+                        max: maxPrice, 
+                        grid: { color: '#222' } 
+                    }
+                }
+            }
+        });
+        
+        updateCompareStats(oilData.brent, oilData.wti);
+        return;
+    }
+    
+    // Single mode
+    if (!oilData || !oilData.history || oilData.history.length === 0) {
+        console.error('No history data');
+        return;
+    }
+    
+    const dates = oilData.history.map(h => h.date.slice(5));
+    const prices = oilData.history.map(h => h.price);
+    
+    const minPrice = Math.min(...prices) - 2;
+    const maxPrice = Math.max(...prices) + 2;
+    
+    const gradient = ctx.createLinearGradient(0, 0, 0, 350);
+    gradient.addColorStop(0, 'rgba(255, 170, 0, 0.3)');
+    gradient.addColorStop(1, 'rgba(255, 170, 0, 0.01)');
+    
+    oilChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: dates,
+            datasets: [{
+                label: `${oilData.name} - Closing Price (USD)`,
+                data: prices,
+                borderColor: '#ffaa00',
+                backgroundColor: gradient,
+                borderWidth: 2.5,
+                pointRadius: 3,
+                pointBackgroundColor: '#ffaa00',
+                pointBorderColor: '#fff',
+                fill: true,
+                tension: 0.2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false, // SỬA THÀNH FALSE: Giúp biểu đồ fix cứng theo container, không bị nhảy chiều cao
+            animation: {
+                duration: 500, // Rút ngắn thời gian vẽ (hoặc set thành 0 / false để tắt hẳn animation nếu không cần thiết)
+                easing: 'easeOutQuart' // Làm mượt hiệu ứng lúc kết thúc
+            },
+            layout: {
+                padding: 10 // Thêm khoảng lề cố định để trục X/Y không bị co giãn lúc hiện nhãn
+            },
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            plugins: {
+                legend: { labels: { color: '#fff' } },
+                tooltip: { 
+                    callbacks: { 
+                        label: (ctx) => `${ctx.dataset.label}: $${ctx.raw} USD` 
+                    }
+                }
+            },
+            scales: {
+                x: { 
+                    ticks: { color: '#aaa', maxRotation: 45, autoSkip: true, maxTicksLimit: 8 }, 
+                    grid: { color: '#222' } 
+                },
+                y: { 
+                    ticks: { color: '#aaa', callback: v => '$' + v }, 
+                    min: minPrice, 
+                    max: maxPrice, 
+                    grid: { color: '#222' } 
+                }
+            }
+        }
+    });
+    
+    updateSingleStats(oilData);
+}
+
+function updateSingleStats(oilData) {
+    const prices = oilData.history.map(h => h.price);
+    const current = prices[prices.length - 1];
+    const weekAgo = prices[prices.length - 8] || prices[0];
+    const monthAgo = prices[0];
+    const avg = (prices.reduce((a, b) => a + b, 0) / prices.length).toFixed(2);
+    const max = Math.max(...prices);
+    const min = Math.min(...prices);
+    const weekChange = ((current - weekAgo) / weekAgo * 100).toFixed(2);
+    const monthChange = ((current - monthAgo) / monthAgo * 100).toFixed(2);
+    
+    const statsHtml = `
+        <div class="oil-stat-card">
+            <div class="oil-stat-label">Current</div>
+            <div class="oil-stat-value">$${current.toFixed(2)}</div>
+        </div>
+        <div class="oil-stat-card">
+            <div class="oil-stat-label">7d Change</div>
+            <div class="oil-stat-value ${weekChange >= 0 ? 'oil-stat-change-up' : 'oil-stat-change-down'}">
+                ${weekChange >= 0 ? '▲' : '▼'} ${Math.abs(weekChange)}%
+            </div>
+        </div>
+        <div class="oil-stat-card">
+            <div class="oil-stat-label">30d Change</div>
+            <div class="oil-stat-value ${monthChange >= 0 ? 'oil-stat-change-up' : 'oil-stat-change-down'}">
+                ${monthChange >= 0 ? '▲' : '▼'} ${Math.abs(monthChange)}%
+            </div>
+        </div>
+        <div class="oil-stat-card">
+            <div class="oil-stat-label">30d Avg</div>
+            <div class="oil-stat-value">$${avg}</div>
+        </div>
+        <div class="oil-stat-card">
+            <div class="oil-stat-label">30d Range</div>
+            <div class="oil-stat-value">$${min} - $${max}</div>
+        </div>
+    `;
+    
+    const statsDiv = document.getElementById('oil-chart-stats');
+    if (statsDiv) statsDiv.innerHTML = statsHtml;
+}
+
+function updateCompareStats(brent, wti) {
+    const brentPrices = brent.history.map(h => h.price);
+    const wtiPrices = wti.history.map(h => h.price);
+    const brentCurrent = brentPrices[brentPrices.length - 1];
+    const wtiCurrent = wtiPrices[wtiPrices.length - 1];
+    const brentChange = ((brentCurrent - brentPrices[0]) / brentPrices[0] * 100).toFixed(2);
+    const wtiChange = ((wtiCurrent - wtiPrices[0]) / wtiPrices[0] * 100).toFixed(2);
+    
+    const statsHtml = `
+        <div class="oil-stat-card">
+            <div class="oil-stat-label">Brent Current</div>
+            <div class="oil-stat-value">$${brentCurrent.toFixed(2)}</div>
+            <div class="${brentChange >= 0 ? 'oil-stat-change-up' : 'oil-stat-change-down'}">
+                ${brentChange >= 0 ? '▲' : '▼'} ${Math.abs(brentChange)}% (30d)
+            </div>
+        </div>
+        <div class="oil-stat-card">
+            <div class="oil-stat-label">WTI Current</div>
+            <div class="oil-stat-value">$${wtiCurrent.toFixed(2)}</div>
+            <div class="${wtiChange >= 0 ? 'oil-stat-change-up' : 'oil-stat-change-down'}">
+                ${wtiChange >= 0 ? '▲' : '▼'} ${Math.abs(wtiChange)}% (30d)
+            </div>
+        </div>
+        <div class="oil-stat-card">
+            <div class="oil-stat-label">Spread</div>
+            <div class="oil-stat-value">$${(brentCurrent - wtiCurrent).toFixed(2)}</div>
+            <div class="oil-stat-label">Brent - WTI</div>
+        </div>
+    `;
+    
+    const statsDiv = document.getElementById('oil-chart-stats');
+    if (statsDiv) statsDiv.innerHTML = statsHtml;
+}
+
+async function showOilChartModal() {
+    const modal = document.getElementById('oil-chart-modal');
+    if (!modal) return;
+    
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    
+    // Show loading
+    const statsDiv = document.getElementById('oil-chart-stats');
+    if (statsDiv) statsDiv.innerHTML = '<div class="oil-stat-card">📡 Loading oil price data...</div>';
+    
+    const oilData = await loadOilChartData(currentSymbol);
+    if (oilData) {
+        renderOilChart(oilData);
+    } else {
+        // Show error if no data
+        const canvas = document.getElementById('oil-chart-canvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#ff4444';
+            ctx.font = '14px Arial';
+            ctx.fillText('⚠️ No oil price data available. Please check API.', 50, 100);
+        }
+        if (statsDiv) statsDiv.innerHTML = '<div class="oil-stat-card">❌ Failed to load data</div>';
+    }
+}
+
+function closeOilChartModal() {
+    const modal = document.getElementById('oil-chart-modal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+}
+
+async function refreshOilChart() {
+    cachedOilData = null;
+    const statsDiv = document.getElementById('oil-chart-stats');
+    if (statsDiv) statsDiv.innerHTML = '<div class="oil-stat-card">🔄 Refreshing...</div>';
+    
+    const oilData = await loadOilChartData(currentSymbol, true);
+    if (oilData) {
+        renderOilChart(oilData);
+    }
+}
+
+function setupOilChartModal() {
+    const btn = document.getElementById('btn-oil-chart');
+    const closeBtn = document.getElementById('oil-modal-close-btn');
+    const modal = document.getElementById('oil-chart-modal');
+    const tabBtns = document.querySelectorAll('.oil-tab-btn');
+    
+    if (btn) {
+        btn.onclick = showOilChartModal;
+    }
+    
+    if (closeBtn) {
+        closeBtn.onclick = closeOilChartModal;
+    }
+    
+    // Close on outside click
+    window.onclick = (e) => {
+        if (e.target === modal) {
+            closeOilChartModal();
+        }
+    };
+    
+    // ESC key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal && modal.style.display === 'block') {
+            closeOilChartModal();
+        }
+    });
+    
+    // Tab switching
+    tabBtns.forEach(btn => {
+        btn.onclick = async () => {
+            tabBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentSymbol = btn.dataset.symbol;
+            
+            const statsDiv = document.getElementById('oil-chart-stats');
+            if (statsDiv) statsDiv.innerHTML = '<div class="oil-stat-card">📡 Loading...</div>';
+            
+            const oilData = await loadOilChartData(currentSymbol);
+            if (oilData) renderOilChart(oilData);
+        };
+    });
+    
+    // Add refresh button if not exists
+    const header = document.querySelector('.oil-modal-header');
+    if (header && !document.getElementById('oil-refresh-btn')) {
+        const refreshBtn = document.createElement('button');
+        refreshBtn.id = 'oil-refresh-btn';
+        refreshBtn.innerHTML = '⟳ Refresh';
+        refreshBtn.style.cssText = `
+            background: #1a1a2e;
+            border: 1px solid #ffaa00;
+            color: #ffaa00;
+            padding: 6px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-right: 15px;
+            font-size: 13px;
+        `;
+        refreshBtn.onclick = refreshOilChart;
+        
+        const closeBtnEl = document.getElementById('oil-modal-close-btn');
+        if (closeBtnEl) {
+            header.insertBefore(refreshBtn, closeBtnEl);
+        }
+    }
+    
+    // Preload data
+    loadOilChartData('BZ=F');
+}
+
+// Initialize
+if (typeof Chart !== 'undefined') {
+    setupOilChartModal();
+} else {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
+    script.onload = setupOilChartModal;
+    document.head.appendChild(script);
+}
+
 // Khởi tạo tất cả
 async function init() {
     // Init existing dashboard
@@ -822,10 +1244,26 @@ async function init() {
     await loadPolymarket();
     await loadGdelt();
     await loadInsight();
+    await loadOpenSky();
 
-    // Auto refresh security every 5 minutes
-    setInterval(loadSecurityAdvisories, 300000);
-    setInterval(loadOpenSky, 120000);
+    setInterval(async () => {
+        console.log("🔄 Đang tự động quét lại dữ liệu JSON mới...");
+        
+        await initDashboard();
+        fetchOilData();
+        await loadSecurityAdvisories();
+        await loadLiveuamap();
+        await loadTelegram();
+        await loadPolymarket();
+        await loadGdelt();
+        await loadOpenSky();
+        await loadInsight();
+        
+    }, 60000); // 60000 mili-giây = 1 phút
+
+    // // Auto refresh security every 5 minutes
+    // setInterval(loadSecurityAdvisories, 300000);
+    // setInterval(loadOpenSky, 120000);
 }
 
 // Run initialization

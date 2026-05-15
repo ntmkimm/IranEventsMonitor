@@ -123,6 +123,18 @@ def run_insight_generation():
     else:
         print(f"❌ Insight generation failed: {result.stderr}")
 
+def run_oil_history_update():
+    """Cập nhật lịch sử giá dầu (thêm ngày mới, giữ 30 ngày)"""
+    print("🛢️ Running oil history update...")
+    script_path = os.path.join(os.path.dirname(__file__), 'crawl_oil_history.py')
+    if os.path.exists(script_path):
+        result = subprocess.run(['python', script_path, '--update'], capture_output=True, text=True)
+        print(result.stdout)
+        if result.returncode != 0:
+            print(f"❌ Oil history update error: {result.stderr}")
+    else:
+        print(f"❌ File not found: {script_path}")
+
 # ============ API ENDPOINTS ============
 
 @app.route('/api/events', methods=['GET'])
@@ -236,6 +248,19 @@ def get_insight():
     data = insight_panel.load_insight()
     return jsonify(data)
 
+# ============ OIL HISTORY API ============
+
+@app.route('/api/oil/history', methods=['GET'])
+def get_oil_history():
+    try:
+        path = os.path.join(os.path.dirname(__file__), 'data', 'oil_history.json')
+        if os.path.exists(path):
+            with open(path, 'r') as f:
+                return jsonify(json.load(f))
+        return jsonify({'error': 'No data'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 # ============ REFRESH API ============
 
 @app.route('/api/refresh/acled', methods=['POST'])
@@ -333,6 +358,7 @@ scheduler.add_job(run_opensky_crawl, 'interval', minutes=5)
 scheduler.add_job(run_gdelt_crawl, 'interval', minutes=30) 
 scheduler.add_job(run_acled_crawl, 'interval', minutes=240)
 scheduler.add_job(run_insight_generation, 'interval', minutes=120)
+scheduler.add_job(run_oil_history_update, 'interval', minutes=1440)
 scheduler.start()
 
 # Chạy lần đầu khi khởi động
